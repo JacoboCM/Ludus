@@ -1,0 +1,27 @@
+nav{
+    background-color: #353535;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+}
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+nav ul li {
+    display: inline-block; /* Mostrar los elementos en línea */
+    color: #fff;
+}
+nav ul li a {
+    display: block; /* Convertir los enlaces en bloques */
+    padding: 1em; /* Agregar relleno alrededor del texto */
+    color: #fff; /* Color del texto */
+    text-decoration: none; /* Quitar subrayado de los enlaces */
+}
+
+/* Estilos para los enlaces cuando se les pasa el ratón por encima */
+nav ul li a:hover {
+    background-color: #ff6c6c; /* Cambiar el color de fondo al pasar el ratón */
+}
