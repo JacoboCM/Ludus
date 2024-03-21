@@ -3,12 +3,11 @@ body{
 }
 header{
     background-color: blueviolet;
-    height: 200px;
     
 }
 nav{
     background-color: red;
-    height: 150px;
+    
 }
 nav ul{
     background-color: aquamarine;
@@ -22,9 +21,8 @@ nav ul li{
     list-style-type: none;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     width: 100%;
-    
     
 
 }
@@ -34,4 +32,9 @@ nav ul li{
 }
 .titulo h1{
     margin-right: 10px;
+    margin-top: 0;
+    align-items: flex-end;
+}
+nav ul li h2{
+    margin: 0;
 }
