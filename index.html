@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ludus</title>
     <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
   </head>
   <body>
     <header>
@@ -20,5 +21,14 @@
         </ul>
       </nav>
     </header>
+    <section class="carousel-container">
+      <div class="carousel-slide">
+        <img src="https://picsum.photos/500" alt="Image 1" />
+        <img src="https://picsum.photos/501" alt="Image 2" />
+        <img src="https://picsum.photos/502" alt="Image 3" />
+      </div>
+      <button id="prevBtn" onclick="moveSlide(-1)">Prev</button>
+      <button id="nextBtn" onclick="moveSlide(1)">Next</button>
+    </section>
   </body>
 </html>
