@@ -21,14 +21,15 @@
         </ul>
       </nav>
     </header>
-    <section class="carousel-container">
-      <img
-        id="carouselImage"
-        src="https://picsum.photos/1920/1080"
-        alt="Image 1"
-      />
-      <button id="prevBtn"><</button>
-      <button id="nextBtn">></button>
+    <section class="slider-wrapper">
+      <button class="slide-arrow" id="slide-arrow-prev">&#8249;</button>
+      <button class="slide-arrow" id="slide-arrow-next">&#8250;</button>
+      <ul class="slides-container" id="slides-container">
+        <li class="slide"></li>
+        <li class="slide"></li>
+        <li class="slide"></li>
+        <li class="slide"></li>
+      </ul>
     </section>
     <script src="scripts/components/carousel.js"></script>
   </body>
