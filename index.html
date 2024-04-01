@@ -4,13 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ludus</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="styles/style.css" />
+    <link rel="stylesheet" href="styles/components/carousel.css" />
   </head>
   <body>
     <header>
       <nav>
         <ul>
-          <li class="titulo"><h1>Ludus</h1></li>
+          <li class="titulo"><h2>Ludus</h2></li>
           <li><h2>Películas</h2></li>
           <li><h2>Series</h2></li>
           <li><h2>Videojuegos</h2></li>
@@ -20,5 +21,16 @@
         </ul>
       </nav>
     </header>
+    <section class="slider-wrapper">
+      <button class="slide-arrow" id="slide-arrow-prev">&#8249;</button>
+      <button class="slide-arrow" id="slide-arrow-next">&#8250;</button>
+      <ul class="slides-container" id="slides-container">
+        <li class="slide"></li>
+        <li class="slide"></li>
+        <li class="slide"></li>
+        <li class="slide"></li>
+      </ul>
+    </section>
+    <script src="scripts/components/carousel.js"></script>
   </body>
 </html>

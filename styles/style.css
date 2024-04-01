@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #151515;
+  margin: 0;
+  padding: 0;
+}
+
+header {
+  background-color: blueviolet;
+}
+
+nav {
+  background-color: red;
+}
+
+nav ul {
+  background-color: aquamarine;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+}
+
+nav ul li {
+  background-color: blue;
+  color: white;
+  list-style-type: none;
+  padding: 10px;
+}
+
+.titulo {
+  display: flex;
+  align-items: center;
+}
+
+.titulo h1 {
+  margin-right: 10px;
+  margin-top: 0;
+}
+
+nav ul li h2 {
+  margin: 0;
+}
