@@ -1,0 +1,40 @@
+body{
+    background-color: #151515;
+}
+header{
+    background-color: blueviolet;
+    
+}
+nav{
+    background-color: red;
+    
+}
+nav ul{
+    background-color: aquamarine;
+    display: flex;
+    gap: 10px;
+    padding: 0%;
+}
+nav ul li{
+    background-color: blue;
+    color: white;
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    width: 100%;
+    
+
+}
+.titulo {
+    justify-content: right;
+    
+}
+.titulo h1{
+    margin-right: 10px;
+    margin-top: 0;
+    align-items: flex-end;
+}
+nav ul li h2{
+    margin: 0;
+}
