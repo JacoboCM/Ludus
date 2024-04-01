@@ -1,4 +1,4 @@
-# Movie Catalog Project
+# Ludus Project
 
 This project is a simple movie catalog web application built using vanilla HTML, CSS, and JavaScript. It allows users to browse through a collection of movies, view details about each movie, and navigate using a carousel component.
 
