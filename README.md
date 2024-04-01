@@ -46,6 +46,10 @@ To run the project locally, simply open the `index.html` file in a web browser.
 
 Contributions are welcome! If you find any issues or have suggestions for improvements, please feel free to open an issue or submit a pull request.
 
+## Course Information
+
+This project is part of the DAW (Desarrollo de Aplicaciones Web) course at CIFP César Manrique.
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
