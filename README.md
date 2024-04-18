@@ -6,22 +6,24 @@ This project is a simple movie catalog web application built using vanilla HTML,
 
 The project folder is organized as follows:
 
+```
 project/
 │
 ├── index.html
 ├── styles/
-│ ├── style.css
-│ └── components/
-│ ├── carousel.css
-│ └── detailPage.css
+│   ├── style.css
+│   └── components/
+│       ├── carousel.css
+│       └── detailPage.css
 ├── scripts/
-│ ├── script.js
-│ └── components/
-│ ├── carousel.js
-│ └── detailPage.js
+│   ├── script.js
+│   └── components/
+│       ├── carousel.js
+│       └── detailPage.js
 └── assets/
-├── images/
-└── other_assets/
+    ├── images/
+    └── other_assets/
+```
 
 - `index.html`: Main HTML file where the structure of the web application is defined.
 - `styles/`: Directory containing CSS files for styling the application.
