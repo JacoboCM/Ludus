@@ -1,0 +1,172 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root{
+    --color1:#E6190E;
+    --color2:#E6552C;
+    --color3:#E60E6A;
+}
+
+body,html {
+    background-color: #0C0F11;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+}
+
+nav ul {
+    display: flex;
+    position: fixed;
+    background-image: url(../assets/other_assets/navbar.png);
+    backdrop-filter: blur(5px);
+    background-position: 50% 50%;
+    background-repeat: repeat-x;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    top: 0;
+    width: 100%;
+}
+
+nav ul li {
+    list-style-type: none;
+    height: 100%;
+    z-index: 2;
+}
+
+nav ul li:first-child a{
+    display: flex;
+    text-decoration: none;
+    color: inherit;
+    margin: 0;
+}
+
+nav ul li h2{
+    height: 100%;
+    margin: 0;
+    padding: 10px 20px;
+    border-radius: 6px;
+    /*background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
+    /*background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;*/
+}
+
+nav ul li:hover h2{
+    background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
+    color: black;
+}
+
+nav ul li:active{
+    transform: scale(0.9);
+}
+
+.titulo {
+    display: flex;
+    align-items: center;
+}
+
+.titulo:hover h2 {
+    background-image: none;
+    color: inherit;
+}
+
+aside{
+    float: left;
+    margin: 10px 30px;
+    
+}
+
+.detailItem{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 60%;
+    margin-top: 80px;
+}
+
+.detailItem h2{
+    color: #E6190E;
+}
+
+button{
+    border: 0;
+    background-image: linear-gradient(150deg,#E6190E,#E6552C,#E60E6A);
+    border-radius: 8px;
+    color: white;
+    display: flex;
+    font-size: 22px;
+    padding: 4px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+button span{
+    background-color: #1f1f1f;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 6px;
+    transition: .3s;
+}
+
+button:hover span{
+    background: none;
+    color: black;
+}
+
+button:active{
+    transform: scale(0.9);
+}
+
+article{
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+article h3{
+    text-align: start;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    color:#E6190E
+
+}
+
+article p{
+    text-indent: 0;
+    white-space: pre-line;
+}
+
+article>p:nth-child(3)>img{
+    position: relative;
+    top: 5px;
+}
+
+article>a{
+    margin: 10px 0;
+    text-align: start;
+    width: 250px;
+}
+
+article>section{
+    text-align: start;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+.titulo-carrusel{
+    text-align: left;
+    margin-left: 30px;
+}
+
+.grid-item main{
+    z-index: 1;
+}
+
+.items{
+    z-index: 1;
+}
