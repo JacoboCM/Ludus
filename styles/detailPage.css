@@ -45,6 +45,10 @@ nav ul li:first-child a{
     margin: 0;
 }
 
+nav ul li:first-child a>h2{
+    padding-left: 0;
+}
+
 nav ul li h2{
     height: 100%;
     margin: 0;
@@ -90,7 +94,7 @@ aside{
 }
 
 .detailItem h2{
-    color: #E6190E;
+    color: var(--color1);
 }
 
 button{
@@ -158,6 +162,10 @@ article>section{
     cursor: pointer;
 }
 
+section>h3{
+    color: var(--color1);
+}
+
 .titulo-carrusel{
     text-align: left;
     margin-left: 30px;
@@ -169,4 +177,69 @@ article>section{
 
 .items{
     z-index: 1;
+}
+
+footer{
+    background-color: #1f1f1f;
+    min-height: 200px;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+footer>ul{
+    width: 500px;
+    display: grid;
+    grid-template: repeat(4, 1fr) /repeat(3, 1fr); /*rows/columns*/
+}
+
+footer ul li{
+    list-style-type: none;
+}
+
+footer ul li a{
+    text-decoration: none;
+    color: gray;
+}
+
+footer ul li:hover a{
+    color: var(--color1);
+}
+
+.rrss{
+    align-content: center;
+}
+
+.rrss h5, h6{
+    color: gray;
+}
+
+.rrss img{
+    cursor: pointer;
+
+}
+
+.logo-footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.logo-footer a{
+    display: flex;
+    text-decoration: none;
+    margin: 0;
+    color: var(--color1);
+    font-size: 22px;
+}
+
+.logo-footer h2{
+    position: relative;
+    top: 3px;
+}
+
+.logo-footer button{/*hereda el resto de estilo del button +Añadir*/
+    font-size: 16px;
+    position: relative;
+    top:50px;
+    right: 50px;
 }
