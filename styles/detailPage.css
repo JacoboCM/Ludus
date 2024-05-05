@@ -1,245 +1,260 @@
 * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-:root{
-    --color1:#E6190E;
-    --color2:#E6552C;
-    --color3:#E60E6A;
+:root {
+  --color1: #e6190e;
+  --color2: #e6552c;
+  --color3: #e60e6a;
+  --gray: #555;
+  --yellow: #f2e968;
+  --white: #efefef;
+  --black: #0c0f11;
 }
 
-body,html {
-    background-color: #0C0F11;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-    height: 100%;
+body,
+html {
+  background-color: var(--black);
+  color: var(--white);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Helvetica, sans-serif;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
 }
 
 nav ul {
-    display: flex;
-    position: fixed;
-    background-image: url(../assets/other_assets/navbar.png);
-    backdrop-filter: blur(5px);
-    background-position: 50% 50%;
-    background-repeat: repeat-x;
-    justify-content: center;
-    align-items: center;
-    padding: 0;
-    top: 0;
-    width: 100%;
+  display: flex;
+  position: fixed;
+  background-image: url(../assets/other_assets/navbar.png);
+  backdrop-filter: blur(5px);
+  background-position: 50% 50%;
+  background-repeat: repeat-x;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  top: 0;
+  width: 100%;
+  z-index: 2;
 }
 
 nav ul li {
-    list-style-type: none;
-    height: 100%;
-    z-index: 2;
+  list-style-type: none;
+  height: 100%;
+  z-index: 2;
 }
 
-nav ul li:first-child a{
-    display: flex;
-    text-decoration: none;
-    color: inherit;
-    margin: 0;
+nav ul li:first-child a {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  margin: 0;
 }
 
-nav ul li:first-child a>h2{
-    padding-left: 0;
+nav ul li:first-child a > h2 {
+  padding-left: 0;
 }
 
-nav ul li h2{
-    height: 100%;
-    margin: 0;
-    padding: 10px 20px;
-    border-radius: 6px;
-    /*background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
+nav ul li h2 {
+  height: 100%;
+  margin: 0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  /*background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
     /*background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;*/
 }
 
-nav ul li:hover h2{
-    background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
-    color: black;
+nav ul li:hover h2 {
+  background-image: linear-gradient(
+    45deg,
+    var(--color1),
+    var(--color2),
+    var(--color3)
+  );
+  color: black;
 }
 
-nav ul li:active{
-    transform: scale(0.9);
+nav ul li:active {
+  transform: scale(0.9);
 }
 
 .titulo {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .titulo:hover h2 {
-    background-image: none;
-    color: inherit;
+  background-image: none;
+  color: inherit;
 }
 
-aside{
-    float: left;
-    margin: 10px 30px;
-    
+aside {
+  float: left;
+  margin: 10px 30px;
 }
 
-.detailItem{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 60%;
-    margin-top: 80px;
+.detailItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 60%;
+  margin-top: 80px;
 }
 
-.detailItem h2{
-    color: var(--color1);
+.detailItem h2 {
+  color: var(--color1);
 }
 
-button{
-    border: 0;
-    background-image: linear-gradient(150deg,#E6190E,#E6552C,#E60E6A);
-    border-radius: 8px;
-    color: white;
-    display: flex;
-    font-size: 22px;
-    padding: 4px;
-    cursor: pointer;
-    transition: .3s;
+button {
+  border: 0;
+  background-image: linear-gradient(150deg, #e6190e, #e6552c, #e60e6a);
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  font-size: 22px;
+  padding: 4px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
-button span{
-    background-color: #1f1f1f;
-    font-weight: bold;
-    padding: 10px 20px;
-    border-radius: 6px;
-    transition: .3s;
+button span {
+  background-color: #1f1f1f;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: 0.3s;
 }
 
-button:hover span{
-    background: none;
-    color: black;
+button:hover span {
+  background: none;
+  color: black;
 }
 
-button:active{
-    transform: scale(0.9);
+button:active {
+  transform: scale(0.9);
 }
 
-article{
-    display: flex;
-    flex-direction: column;
-    width: 60%;
+article {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
 }
 
-article h3{
-    text-align: start;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    color:#E6190E
-
+article h3 {
+  text-align: start;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #e6190e;
 }
 
-article p{
-    text-indent: 0;
-    white-space: pre-line;
+article p {
+  text-indent: 0;
+  white-space: pre-line;
 }
 
-article>p:nth-child(3)>img{
-    position: relative;
-    top: 5px;
+article > p:nth-child(3) > img {
+  position: relative;
+  top: 5px;
 }
 
-article>a{
-    margin: 10px 0;
-    text-align: start;
-    width: 250px;
+article > a {
+  margin: 10px 0;
+  text-align: start;
+  width: 250px;
 }
 
-article>section{
-    text-align: start;
-    margin: 10px 0;
-    cursor: pointer;
+article > section {
+  text-align: start;
+  margin: 10px 0;
+  cursor: pointer;
 }
 
-section>h3{
-    color: var(--color1);
+section > h3 {
+  color: var(--color1);
 }
 
-.titulo-carrusel{
-    text-align: left;
-    margin-left: 30px;
+.titulo-carrusel {
+  text-align: left;
+  margin-left: 30px;
 }
 
-.grid-item main{
-    z-index: 1;
+.grid-item main {
+  z-index: 1;
 }
 
-.items{
-    z-index: 1;
+.items {
+  z-index: 1;
 }
 
-footer{
-    background-color: #1f1f1f;
-    min-height: 200px;
-    width: 100%;
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
+footer {
+  background-color: #1f1f1f;
+  min-height: 200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 }
 
-footer>ul{
-    width: 500px;
-    display: grid;
-    grid-template: repeat(4, 1fr) /repeat(3, 1fr); /*rows/columns*/
+footer > ul {
+  width: 500px;
+  display: grid;
+  grid-template: repeat(4, 1fr) / repeat(3, 1fr); /*rows/columns*/
 }
 
-footer ul li{
-    list-style-type: none;
+footer ul li {
+  list-style-type: none;
 }
 
-footer ul li a{
-    text-decoration: none;
-    color: gray;
+footer ul li a {
+  text-decoration: none;
+  color: gray;
 }
 
-footer ul li:hover a{
-    color: var(--color1);
+footer ul li:hover a {
+  color: var(--color1);
 }
 
-.rrss{
-    align-content: center;
+.rrss {
+  align-content: center;
 }
 
-.rrss h5, h6{
-    color: gray;
+.rrss h5,
+h6 {
+  color: gray;
 }
 
-.rrss img{
-    cursor: pointer;
-
+.rrss img {
+  cursor: pointer;
 }
 
-.logo-footer{
-    display: flex;
-    justify-content: center;
-    align-items: center;
+.logo-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.logo-footer a{
-    display: flex;
-    text-decoration: none;
-    margin: 0;
-    color: var(--color1);
-    font-size: 22px;
-}
-
-.logo-footer h2{
-    position: relative;
-    top: 3px;
+.logo-footer a {
+  display: flex;
+  text-decoration: none;
+  margin: 0;
+  color: var(--color1);
+  font-size: 22px;
 }
 
-.logo-footer button{/*hereda el resto de estilo del button +Añadir*/
-    font-size: 16px;
-    position: relative;
-    top:50px;
-    right: 50px;
+.logo-footer h2 {
+  position: relative;
+  top: 3px;
+}
+
+.logo-footer button {
+  /*hereda el resto de estilo del button +Añadir*/
+  font-size: 16px;
+  position: relative;
+  top: 50px;
+  right: 50px;
 }
