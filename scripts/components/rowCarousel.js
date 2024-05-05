@@ -1,27 +1,32 @@
-const slider = document.querySelector(".items");
 let isDown = false;
 let startX;
 let scrollLeft;
 
-slider.addEventListener("mousedown", (e) => {
+const carousel = document.querySelector(".row-carousel");
+const carouselContent = document.querySelector(".carousel-content");
+
+carousel.addEventListener("mousedown", (e) => {
   isDown = true;
-  slider.classList.add("active");
-  startX = e.pageX - slider.offsetLeft;
-  scrollLeft = slider.scrollLeft;
+  startX = e.pageX - carousel.offsetLeft;
+  scrollLeft = carousel.scrollLeft;
 });
-slider.addEventListener("mouseleave", () => {
+
+carousel.addEventListener("mouseleave", () => {
   isDown = false;
-  slider.classList.remove("active");
 });
-slider.addEventListener("mouseup", () => {
+
+carousel.addEventListener("mouseup", () => {
   isDown = false;
-  slider.classList.remove("active");
 });
-slider.addEventListener("mousemove", (e) => {
+
+carousel.addEventListener("mousemove", (e) => {
   if (!isDown) return;
   e.preventDefault();
-  const x = e.pageX - slider.offsetLeft;
-  const walk = (x - startX) * 3; //scroll-fast
-  slider.scrollLeft = scrollLeft - walk;
-  console.log(walk);
+  const x = e.pageX - carousel.offsetLeft;
+  const walk = (x - startX) * 2; // Adjust the multiplier to control scrolling speed
+  carousel.scrollLeft = scrollLeft - walk;
 });
+
+function goToDetailPage(itemId) {
+  window.location.href = `/pages/detailPage.html`; // Redirect to detail page with item ID
+}

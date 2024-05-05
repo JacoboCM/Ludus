@@ -1,34 +1,94 @@
+/* GET THE GOOGLE FONT SPECIMEN */
+@import url("https://fonts.googleapis.com/css?family=Rubik");
+
 * {
   box-sizing: border-box;
-}
-
-body {
-  background-color: #151515;
   margin: 0;
   padding: 0;
 }
 
-header {
-  background-color: blueviolet;
+:root {
+  --color1: #e6190e;
+  --color2: #e6552c;
+  --color3: #e60e6a;
+  --gray: #555;
+  --yellow: #f2e968;
+  --white: #efefef;
+  --black: #0c0f11;
+  --itemGrow: 1.2;
+  --duration: 250ms;
 }
 
-nav {
-  background-color: red;
+body,
+html {
+  background-color: var(--black);
+  color: var(--white);
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  font-family: Helvetica, sans-serif;
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+header {
+  height: 47px;
 }
 
 nav ul {
-  background-color: aquamarine;
   display: flex;
-  justify-content: space-between;
+  position: fixed;
+  background-image: url(../assets/other_assets/navbar.png);
+  backdrop-filter: blur(5px);
+  background-position: 50% 50%;
+  background-repeat: repeat-x;
+  justify-content: center;
   align-items: center;
   padding: 0;
+  width: 100%;
 }
 
 nav ul li {
-  background-color: blue;
-  color: white;
   list-style-type: none;
-  padding: 10px;
+  height: 100%;
+  z-index: 2;
+}
+
+nav ul li:first-child a {
+  display: flex;
+  text-decoration: none;
+  color: inherit;
+  margin: 0;
+}
+
+nav ul li:first-child a > h2 {
+  padding-left: 0;
+}
+
+nav ul li h2 {
+  height: 100%;
+  margin: 0;
+  padding: 10px 20px;
+  border-radius: 6px;
+  /*background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
+  /*background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;*/
+}
+
+nav ul li:hover h2 {
+  background-image: linear-gradient(
+    45deg,
+    var(--color1),
+    var(--color2),
+    var(--color3)
+  );
+  color: black;
+}
+
+nav ul li:active {
+  transform: scale(0.9);
 }
 
 .titulo {
@@ -36,11 +96,73 @@ nav ul li {
   align-items: center;
 }
 
-.titulo h1 {
-  margin-right: 10px;
-  margin-top: 0;
+.titulo:hover h2 {
+  background-image: none;
+  color: inherit;
 }
 
-nav ul li h2 {
+footer {
+  background-color: #1f1f1f;
+  min-height: 200px;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+footer > ul {
+  width: 500px;
+  display: grid;
+  grid-template: repeat(4, 1fr) / repeat(3, 1fr); /*rows/columns*/
+}
+
+footer ul li {
+  list-style-type: none;
+}
+
+footer ul li a {
+  text-decoration: none;
+  color: gray;
+}
+
+footer ul li:hover a {
+  color: var(--color1);
+}
+
+.rrss {
+  align-content: center;
+}
+
+.rrss h5,
+h6 {
+  color: gray;
+}
+
+.rrss img {
+  cursor: pointer;
+}
+
+.logo-footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.logo-footer a {
+  display: flex;
+  text-decoration: none;
   margin: 0;
+  color: var(--color1);
+  font-size: 22px;
+}
+
+.logo-footer h2 {
+  position: relative;
+  top: 3px;
+}
+
+.logo-footer button {
+  /*hereda el resto de estilo del button +Añadir*/
+  font-size: 16px;
+  position: relative;
+  top: 50px;
+  right: 50px;
 }
