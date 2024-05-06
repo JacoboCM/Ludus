@@ -112,35 +112,6 @@ aside {
   color: var(--color1);
 }
 
-button {
-  border: 0;
-  background-image: linear-gradient(150deg, #e6190e, #e6552c, #e60e6a);
-  border-radius: 8px;
-  color: white;
-  display: flex;
-  font-size: 22px;
-  padding: 4px;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-button span {
-  background-color: #1f1f1f;
-  font-weight: bold;
-  padding: 10px 20px;
-  border-radius: 6px;
-  transition: 0.3s;
-}
-
-button:hover span {
-  background: none;
-  color: black;
-}
-
-button:active {
-  transform: scale(0.9);
-}
-
 article {
   display: flex;
   flex-direction: column;
@@ -177,8 +148,7 @@ article > section {
   cursor: pointer;
 }
 
-body>h3 {
-  color: var(--color1);
+body > h3 {
   margin-left: 10px;
 }
 
@@ -213,7 +183,7 @@ footer > ul {
 
 footer ul li {
   list-style-type: none;
-  text-align: center
+  text-align: center;
 }
 
 footer ul li a {
@@ -243,6 +213,7 @@ h6 {
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 }
 .logo-footer a {
   display: flex;
@@ -257,9 +228,40 @@ h6 {
   top: 3px;
 }
 
-.logo-footer button { /*hereda el resto de estilo del button +Añadir*/
+.logo-footer button {
+  margin: 5px;
+}
+
+button {
+  border: 0;
+  background-image: linear-gradient(150deg, #e6190e, #e6552c, #e60e6a);
+  border-radius: 8px;
+  color: white;
+  display: flex;
+  font-size: 22px;
+  padding: 4px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button span {
+  background-color: #1f1f1f;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: 0.3s;
+}
+
+button:hover span {
+  background: none;
+  color: black;
+}
+
+button:active {
+  transform: scale(0.9);
+}
+
+.logo-footer button {
+  /*hereda el resto de estilo del button +Añadir*/
   font-size: 16px;
-  position: relative;
-  top: 50px;
-  right: 50px;
 }

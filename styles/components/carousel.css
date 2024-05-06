@@ -15,7 +15,6 @@
     to bottom,
     rgba(255, 255, 255, 0),
     /* Transparent color at the top */ var(--black)
-      /* Semi-transparent white color at the bottom */
   );
 }
 
