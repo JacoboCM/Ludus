@@ -73,7 +73,7 @@ nav ul li h2 {
 
 nav ul li:hover h2 {
   background-image: linear-gradient(
-    45deg,
+    150deg,
     var(--color1),
     var(--color2),
     var(--color3)
@@ -157,6 +157,7 @@ article h3 {
 article p {
   text-indent: 0;
   white-space: pre-line;
+  display: inline;
 }
 
 article > p:nth-child(3) > img {
@@ -176,8 +177,9 @@ article > section {
   cursor: pointer;
 }
 
-section > h3 {
+body>h3 {
   color: var(--color1);
+  margin-left: 10px;
 }
 
 .titulo-carrusel {
@@ -199,9 +201,11 @@ footer {
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  margin-top: 20px;
 }
 
 footer > ul {
+  margin-top: 20px;
   width: 500px;
   display: grid;
   grid-template: repeat(4, 1fr) / repeat(3, 1fr); /*rows/columns*/
@@ -209,6 +213,7 @@ footer > ul {
 
 footer ul li {
   list-style-type: none;
+  text-align: center
 }
 
 footer ul li a {
@@ -221,6 +226,7 @@ footer ul li:hover a {
 }
 
 .rrss {
+  text-align: center;
   align-content: center;
 }
 
@@ -251,8 +257,7 @@ h6 {
   top: 3px;
 }
 
-.logo-footer button {
-  /*hereda el resto de estilo del button +Añadir*/
+.logo-footer button { /*hereda el resto de estilo del button +Añadir*/
   font-size: 16px;
   position: relative;
   top: 50px;
