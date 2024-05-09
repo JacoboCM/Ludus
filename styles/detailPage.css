@@ -150,6 +150,7 @@ article > section {
 
 body > h3 {
   margin-left: 10px;
+  color: var(--color1);
 }
 
 .titulo-carrusel {
