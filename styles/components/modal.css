@@ -1,18 +1,16 @@
-/* Style the modal */
 .modal {
-  display: none; /* Hidden by default */
-  position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
+  display: none;
+  position: fixed;
+  z-index: 1;
   left: 0;
   top: 0;
-  width: 100%; /* Full width */
-  height: 100%; /* Full height */
-  overflow: auto; /* Enable scroll if needed */
+  width: 100%;
+  height: 100%;
+  overflow: auto;
   color: white;
   background-color: rgba(0, 0, 0, 0.9);
 }
 
-/* Center modal content vertically and horizontally */
 .modal-content {
   position: absolute;
   top: 50%;
@@ -21,20 +19,21 @@
   background-color: rgba(0, 0, 0, 0.8);
   padding: 20px;
   border: 1px solid #888;
-  width: 80%; /* Adjust the width as needed */
+  width: 50%;
 }
 
-/* Close button */
 .close {
   color: white;
   float: right;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: bold;
+  height: 18px;
+  position: relative;
+  bottom: 15px;
 }
 
-.close:hover,
-.close:focus {
-  color: black;
+.close:hover, .close:focus {
+  color: var(--color1);
   text-decoration: none;
   cursor: pointer;
 }
@@ -46,34 +45,45 @@
 
 label {
   font-weight: bold;
+  color: lightgrey;
 }
 
-input[type="text"],
-input[type="email"],
-textarea {
+input[type="text"], input[type="email"], textarea {
   width: 100%;
   padding: 8px;
-  margin: 5px 0;
+  margin: 10px 0;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-sizing: border-box;
+  background-color: lightgrey;
 }
 
 textarea {
   height: 100px;
+  resize: vertical;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 input[type="submit"] {
-  background-color: #4caf50;
-  color: white;
-  padding: 10px 20px;
+  background-image: linear-gradient(
+    150deg,
+    var(--color1),
+    var(--color2),
+    var(--color3)
+  );
+  color: black;
+  font-weight: bold;
+  font-size: 18px;
+  padding: 5px 10px;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
 input[type="submit"]:hover {
-  background-color: #45a049;
+  color: white;
+  transition: 0.3s;
 }
 
 /* Add some spacing between form elements */

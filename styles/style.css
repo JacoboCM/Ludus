@@ -101,6 +101,12 @@ nav ul li:active {
   color: inherit;
 }
 
+body>h3{
+  margin-left: 20px;
+  color: var(--color1);
+  font-weight: bold;
+}
+
 footer {
   background-color: #1f1f1f;
   min-height: 200px;
