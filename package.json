@@ -1,0 +1,12 @@
+{
+  "name": "ludus",
+  "version": "1.0.0",
+  "description": "This project is a simple movie catalog web application built using vanilla HTML, CSS, and JavaScript. It allows users to browse through a collection of movies, view details about each movie, and navigate using a carousel component.",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
