@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Juego</title>
+    <script defer src="script.js"></script>
+</head>
+<body>
+    <h1>Información del Juego</h1>
+
+    <label for="gameId">Ingrese ID del Juego:</label>
+    <input type="number" id="gameId" placeholder="Ejemplo: 25076">
+    <button onclick="buscarJuego(document.getElementById('gameId').value)">Buscar</button>
+    
+    <div id="resultado"></div>
+</body>
+</html>
