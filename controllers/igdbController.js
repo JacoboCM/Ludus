@@ -1,5 +1,9 @@
 const axios = require('axios');
 require('dotenv').config();
+//Se usa node-cache para almacenar en caché las respuestas de la API
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 3600 }); // 1 hora de caché
+
 //Se usa trim para que no se cuelen saltos o espacios
 const clientId = process.env.CLIENT_ID.trim();
 const accessToken = process.env.ACCESS_TOKEN.trim();
@@ -110,6 +114,9 @@ const obtenerCover = async (id) => {
             // Convertir la URL (por ejemplo, agregar "https:")
             if (cover.url && cover.url.startsWith("//")) {
                 cover.url = "https:" + cover.url;
+            }
+            if (cover.url && cover.url.includes("t_thumb")) {
+                cover.url = cover.url.replace("t_thumb", "t_cover_big");
             }
             return cover.url;
         }
@@ -240,6 +247,11 @@ const obtenerCompanies = async (ids) => {
 };
 
 const obtenerJuego = async (gameId) => {
+    const cacheKey = `juego-${gameId}`;
+    const cachedJuego = cache.get(cacheKey);
+    if (cachedJuego) {
+        return cachedJuego;
+    }
     // Consulta a IGDB para obtener todos los campos del juego
     const gameResponse = await axios.post(
         'https://api.igdb.com/v4/games',
@@ -347,10 +359,179 @@ const obtenerJuego = async (gameId) => {
     }
 
     console.log("Traducción completada");
+    cache.set(cacheKey, juego);
     return juego;
 };
 
+const obtenerSliderPrincipal = async () => {
+    const cacheKey = 'sliderPrincipal';
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+        return cachedData;
+    }
+
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const oneMonthAgo = currentTimestamp - (30 * 24 * 60 * 60);
+
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            `fields id, name, first_release_date, screenshots;
+            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp};
+            sort first_release_date desc;
+            limit 10;`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        // Procesa cada juego: si tiene screenshots, obten la URL del primero y ajusta la resolución.
+        const juegos = await Promise.all(response.data.map(async (juego) => {
+            if (juego.screenshots && juego.screenshots.length > 0) {
+                // Supongamos que juego.screenshots es un array de IDs y usas obtenerScreenshots para obtener los datos.
+                const screenshotsArr = await obtenerScreenshots([juego.screenshots[0]]);
+                if (screenshotsArr.length > 0) {
+                    let screenshotUrl = screenshotsArr[0].url;
+                    // Si la URL contiene "t_thumb", reemplázalo por "t_screenshot_huge" para mayor resolución.
+                    if (screenshotUrl.includes("t_thumb")) {
+                        screenshotUrl = screenshotUrl.replace("t_thumb", "t_screenshot_huge");
+                    }
+                    juego.screenshot = screenshotUrl;
+                } else {
+                    juego.screenshot = null;
+                }
+            } else {
+                juego.screenshot = null;
+            }
+            return juego;
+        }));
+
+        cache.set(cacheKey, juegos);
+        return juegos;
+
+    } catch (error) {
+        console.error('Error al obtener slider principal:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+const obtenerTop10 = async () => {
+    const cachedTop10 = cache.get('top10');
+    if (cachedTop10) {
+        return cachedTop10;
+    }
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            'fields id, name, total_rating, total_rating_count, cover; where total_rating_count > 1800; sort total_rating desc; limit 20;',
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+        // Procesa cada juego para convertir la id de cover en la URL correspondiente usando obtenerCover.
+        const juegos = await Promise.all(response.data.map(async (juego) => {
+            if (juego.cover) {
+                // Se reemplaza game.cover (que es un id) por la URL real usando obtenerCover.
+                juego.cover = await obtenerCover(juego.cover);
+            }
+            return juego;
+        }));
+        // Almacena el resultado en caché
+        cache.set('top10', juegos);
+        return juegos;
+    } catch (error) {
+        console.error('Error al obtener Top 10:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+const obtenerNuevosLanzamientos = async () => {
+    const cachedNuevos = cache.get('nuevos');
+    if (cachedNuevos) {
+        return cachedNuevos;
+    }
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const oneMonthAgo = currentTimestamp - (30 * 24 * 60 * 60); // hace 30 días
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            `fields id, name, first_release_date, cover;
+            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp};
+            sort first_release_date desc;
+            limit 20;`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+        // Procesar cada juego para obtener la URL de cover (usando obtenerCover)
+        const juegos = await Promise.all(response.data.map(async (juego) => {
+            if (juego.cover) {
+                juego.cover = await obtenerCover(juego.cover);
+            }
+            return juego;
+        }));
+        cache.set('nuevos', juegos);
+        return juegos;
+    } catch (error) {
+        console.error('Error al obtener nuevos lanzamientos:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+const obtenerProximosLanzamientos = async () => {
+    const cachedProximos = cache.get('proximos');
+    if (cachedProximos) {
+        return cachedProximos;
+    }
+    const currentTimestamp = Math.floor(Date.now() / 1000);
+    const oneYearLater = currentTimestamp + (365 * 24 * 60 * 60);
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            `fields id, name, first_release_date, cover;
+            where first_release_date > ${currentTimestamp} & first_release_date <= ${oneYearLater};
+            sort first_release_date asc;
+            limit 20;`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+        const juegos = await Promise.all(response.data.map(async (juego) => {
+            if (juego.cover) {
+                juego.cover = await obtenerCover(juego.cover);
+            }
+            return juego;
+        }));
+        cache.set('proximos', juegos);
+        return juegos;
+    } catch (error) {
+        console.error('Error al obtener próximos lanzamientos:', error.response?.data || error.message);
+        throw error;
+    }
+};
+
+
 module.exports = {
+    obtenerSliderPrincipal,
+    obtenerNuevosLanzamientos,
+    obtenerProximosLanzamientos,
+    obtenerTop10,
     obtenerJuego,
     obtenerNombres,
     obtenerCover,

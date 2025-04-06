@@ -1,0 +1,19 @@
+.wrapper {
+  overflow-x: auto; /* Permite el scroll horizontal */
+  scroll-behavior: smooth; /* Para desplazamiento suave */
+  display: flex;    /* Los elementos se distribuyen en línea */
+  margin: 10px 0 10px 0;
+  width: 900px;
+}
+
+.item {
+  display: flex;
+  flex: 0 0 calc(100% / 5); /* Cada item ocupa el 20% del ancho del contenedor */
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.item img{
+  height: 230px;
+  width: 180px;
+}

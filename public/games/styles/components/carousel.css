@@ -1,0 +1,17 @@
+.wrapper-principal {
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  display: flex;
+  width: 100%;
+  margin: 0 0 20px 0;
+}
+
+.wrapper-principal .item {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+}
+
+.wrapper-principal .item img {
+  height: 500px;
+  width: 100%;
+}
