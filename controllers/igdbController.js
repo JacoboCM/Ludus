@@ -30,7 +30,7 @@ const tablas = {
     //rating_count: 'rating_count',
     //release_dates: 'release_dates',
     screenshots: 'screenshots',
-    similar_games: 'games',
+    //similar_games: 'games',
     //slug: 'games',
     //standalone_expansions: 'games',
     storyline: 'storyline',
@@ -127,6 +127,34 @@ const obtenerCover = async (id) => {
     }
 };
 
+const obtenerCoversSimilares = async (ids) => {
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            `fields id, cover; where id = (${ids.join(',')});`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+        // Ahora, para cada juego, usamos obtenerCover para obtener la URL real
+        const covers = await Promise.all(response.data.map(async game => {
+            let coverUrl = null;
+            if (game.cover) {
+                coverUrl = await obtenerCover(game.cover);
+            }
+            return { id: game.id, cover: coverUrl };
+        }));
+        return covers;
+    } catch (error) {
+        console.error('Error al obtener covers de juegos similares:', error.response?.data || error.message);
+        return ids;
+    }
+};
+
 //Obtener paginas webs relacionadas
 const obtenerWebsites = async (ids) => {
     if (!ids || ids.length === 0) return [];
@@ -153,7 +181,6 @@ const obtenerWebsites = async (ids) => {
 //Obtener url de los videos
 const obtenerVideos = async (ids) => {
     if (!ids || ids.length === 0) return [];
-
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/game_videos',
@@ -166,10 +193,12 @@ const obtenerVideos = async (ids) => {
                 }
             }
         );
-        return response.data.map(video => ({
+        // Devolver solo el primer video
+        const videos = response.data.map(video => ({
             name: video.name,
             url: `https://www.youtube.com/embed/${video.video_id}`
         }));
+        return videos.slice(0, 1);
     } catch (error) {
         console.error('Error al obtener videos:', error.response?.data || error.message);
         return [];
@@ -191,10 +220,14 @@ const obtenerScreenshots = async (ids) => {
                 }
             }
         );
-        return response.data.map(screenshot => ({
-            id: screenshot.id,
-            url: screenshot.url
-        }));
+        return response.data.map(screenshot => {
+            let url = screenshot.url;
+            // Si la URL contiene "t_thumb", reemplazar por una versión de mayor resolución
+            if (url && url.includes("t_thumb")) {
+                url = url.replace("t_thumb", "t_screenshot_huge");
+            }
+            return { id: screenshot.id, url: url };
+        });
     } catch (error) {
         console.error('Error al obtener screenshots:', error.response?.data || error.message);
         return [];
@@ -323,7 +356,7 @@ const obtenerJuego = async (gameId) => {
 
     // Procesa juegos similares
     if (juego.similar_games && Array.isArray(juego.similar_games)) {
-        juego.similar_games = await obtenerNombres(juego.similar_games, 'games');
+            juego.similar_games = await obtenerCoversSimilares(juego.similar_games);
     }
 
     // Procesa las URLs de sitios web

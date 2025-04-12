@@ -2,6 +2,8 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  text-decoration: none;
+  color: inherit;
 }
 
 :root {
@@ -85,98 +87,76 @@ nav ul li:active {
   transform: scale(0.9);
 }
 
-.titulo {
-  display: flex;
-  align-items: center;
-}
-
-.titulo:hover h2 {
-  background-image: none;
-  color: inherit;
-}
-
-aside {
-  float: left;
-  margin: 10px 30px;
-}
-
-.detailItem {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 60%;
-  margin-top: 80px;
-}
-
-.detailItem h2 {
-  color: var(--color1);
-  font-weight: bold;
-}
-
-.puntuacion{
-  display: flex;
-  align-items: center;
-  gap:50px;
-  margin: 10px;
-}
-
-.puntuacion p:nth-child(3) img{
+section {
   position: relative;
-  top:5px;
+  margin: auto;
+  max-width: 1300px;
+  min-width: 600px;
 }
 
-article {
-  display: flex;
-  flex-direction: column;
-  width: 60%;
+#resultado{
+  max-width: 1300px;
+  min-width: 600px;
 }
 
-article h3 {
-  text-align: start;
-  margin-top: 10px;
+.top-section{
+  display: grid;
+  grid-template-columns: 780px 500px;
+  gap: 20px;
+  margin: 20px 0 20px 0;
+}
+
+.nombre-titulo{
+  margin-bottom: 20px;
+  font-size: 2em;
+}
+
+.detail-container > p {
   margin-bottom: 10px;
-  color: #e6190e;
 }
 
-article p {
-  text-indent: 0;
-  white-space: pre-line;
-  display: inline;
+.resumen{
+  margin-right: 10px;
+  text-align: justify;
 }
 
-article > p:nth-child(3) > img {
+.bottom-section > p {
+  margin-bottom: 10px;
+  text-align: justify;
+}
+
+.screenshots-container {
+  width: 1300px;       /* O max-width: 1300px; dependiendo de cómo quieras que se comporte en dispositivos más pequeños */
+  margin: 20px 0 20px 0;
+  display: flex;       /* Para disponer las imágenes en una fila */
+}
+
+.screenshots-container .screenshot {
+  flex: 1; 
+  width: 100px;            /* Cada imagen se adapta al espacio disponible */
+  height: 100px;       /* Altura deseada para las imágenes; ajústala a tu gusto */
+  object-fit: cover;   /* Hace que la imagen ocupe todo el espacio definido sin distorsionar */
+  transition: transform 0.3s ease; /* Para el efecto hover, si lo deseas */
+}
+
+.screenshots-container .screenshot:hover {
+  transform: scale(4); /* Aumenta la escala al hacer hover, ajusta el factor según necesites */
+  z-index: 2;            /* Asegura que la imagen ampliada se muestre sobre las demás */
+}
+
+.screenshots-container .screenshot:first-child, .screenshot:nth-child(2) {
+  transform-origin: left center;
+}
+
+/* Para la última imagen, que se agrande desde su extremo derecho */
+.screenshots-container .screenshot:last-child, .screenshot:nth-last-child(2) {
+  transform-origin: right center;
+}
+
+.slider-similares {
   position: relative;
-  top: 5px;
-}
-
-article > a {
-  margin: 10px 0;
-  text-align: start;
-  width: 250px;
-}
-
-article > section {
-  text-align: start;
-  margin: 10px 0;
-  cursor: pointer;
-}
-
-body > h3 {
-  margin-left: 10px;
-  color: var(--color1);
-}
-
-.titulo-carrusel {
-  text-align: left;
-  margin-left: 30px;
-}
-
-.grid-item main {
-  z-index: 1;
-}
-
-.items {
-  z-index: 1;
+  display: flex;
+  justify-content: center;
 }
 
 footer {
