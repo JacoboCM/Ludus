@@ -124,6 +124,34 @@ async function cargarSliderPrincipal() {
         `;
         });
         sliderContainer.innerHTML = sliderHTML;
+        // Crear puntos de navegación
+        const dotsContainer = document.createElement('div');
+        dotsContainer.classList.add('slider-dots');
+        juegos.forEach((_, index) => {
+            const dot = document.createElement('span');
+            dot.classList.add('dot');
+            if (index === 0) dot.classList.add('active');
+            dotsContainer.appendChild(dot);
+        });
+        sliderContainer.after(dotsContainer);
+        //Los puntos hacen scroll al slide correspondiente
+        const slides = sliderContainer.querySelectorAll('.item');
+        const dots = dotsContainer.querySelectorAll('.dot');
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                // Calcula el desplazamiento del slider
+                const scrollAmount = sliderContainer.clientWidth * index;
+                sliderContainer.scrollTo({
+                    left: scrollAmount,
+                    behavior: 'smooth'
+                });
+
+                // Actualiza la clase 'active'
+                dots.forEach(d => d.classList.remove('active'));
+                dot.classList.add('active');
+            });
+        });
     } catch (error) {
         console.error('Error al cargar el slider principal:', error);
     }
@@ -156,6 +184,29 @@ async function cargarTop10() {
                 `;
         });
         sliderContainer.innerHTML = sliderHTML;
+        // Crear botones de flechas
+        const arrowLeft = document.createElement('button');
+        arrowLeft.className = 'arrow-btn arrow-left';
+        arrowLeft.textContent = '‹';
+
+        const arrowRight = document.createElement('button');
+        arrowRight.className = 'arrow-btn arrow-right';
+        arrowRight.textContent = '›';
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = 'slider-wrapper';
+        sliderContainer.parentElement.insertBefore(sliderWrapper, sliderContainer);
+        sliderWrapper.appendChild(arrowLeft);
+        sliderWrapper.appendChild(sliderContainer);
+        sliderWrapper.appendChild(arrowRight);
+
+        arrowLeft.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+
+        arrowRight.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
+        });
 
         // Opcional: Aquí puedes inicializar la funcionalidad de desplazamiento o agregar eventos a las flechas
         // Por ejemplo, si usas una librería o tienes funciones propias para mover el slider.
@@ -182,6 +233,29 @@ async function cargarNuevos() {
             `;
         });
         sliderContainer.innerHTML = sliderHTML;
+        // Crear botones de flechas
+        const arrowLeft = document.createElement('button');
+        arrowLeft.className = 'arrow-btn arrow-left';
+        arrowLeft.textContent = '‹';
+
+        const arrowRight = document.createElement('button');
+        arrowRight.className = 'arrow-btn arrow-right';
+        arrowRight.textContent = '›';
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = 'slider-wrapper';
+        sliderContainer.parentElement.insertBefore(sliderWrapper, sliderContainer);
+        sliderWrapper.appendChild(arrowLeft);
+        sliderWrapper.appendChild(sliderContainer);
+        sliderWrapper.appendChild(arrowRight);
+
+        arrowLeft.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+
+        arrowRight.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
+        });
     } catch (error) {
         console.error('Error al cargar nuevos lanzamientos:', error);
     }
@@ -204,6 +278,29 @@ async function cargarProximos() {
             `;
         });
         sliderContainer.innerHTML = sliderHTML;
+        // Crear botones de flechas
+        const arrowLeft = document.createElement('button');
+        arrowLeft.className = 'arrow-btn arrow-left';
+        arrowLeft.textContent = '‹';
+
+        const arrowRight = document.createElement('button');
+        arrowRight.className = 'arrow-btn arrow-right';
+        arrowRight.textContent = '›';
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = 'slider-wrapper';
+        sliderContainer.parentElement.insertBefore(sliderWrapper, sliderContainer);
+        sliderWrapper.appendChild(arrowLeft);
+        sliderWrapper.appendChild(sliderContainer);
+        sliderWrapper.appendChild(arrowRight);
+
+        arrowLeft.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+
+        arrowRight.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
+        });
     } catch (error) {
         console.error('Error al cargar próximos lanzamientos:', error);
     }

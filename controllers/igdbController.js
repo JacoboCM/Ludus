@@ -234,6 +234,36 @@ const obtenerScreenshots = async (ids) => {
     }
 };
 
+const obtenerArtworks = async (ids) => {
+    if (!ids || ids.length === 0) return [];
+
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/artworks',
+            `fields id, url; where id = (${ids.join(',')});`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+        return response.data.map(artwork => {
+            let url = artwork.url;
+            // Mejorar resolución si es posible
+            if (url) {
+                url = url.replace(/t_thumb|t_cover_big|t_screenshot_huge/, "t_1080p");
+            }
+            return { id: artwork.id, url: url };
+        });
+    } catch (error) {
+        console.error('Error al obtener artworks:', error.response?.data || error.message);
+        return [];
+    }
+};
+
+
 //Obtiene ids de las compañias involucradas 
 const obtenerInvolvedCompanies = async (ids) => {
     if (!ids || ids.length === 0) return [];
@@ -404,15 +434,15 @@ const obtenerSliderPrincipal = async () => {
     }
 
     const currentTimestamp = Math.floor(Date.now() / 1000);
-    const oneMonthAgo = currentTimestamp - (30 * 24 * 60 * 60);
+    const oneMonthAgo = currentTimestamp - (120 * 24 * 60 * 60);
 
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            `fields id, name, first_release_date, screenshots;
-            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp};
-            sort first_release_date desc;
-            limit 10;`,
+            `fields id, name, first_release_date, artworks, total_rating_count;
+            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} & total_rating_count > 30;
+            sort total_rating_count desc;
+            limit 5;`,
             {
                 headers: {
                     'Client-ID': clientId,
@@ -424,16 +454,10 @@ const obtenerSliderPrincipal = async () => {
 
         // Procesa cada juego: si tiene screenshots, obten la URL del primero y ajusta la resolución.
         const juegos = await Promise.all(response.data.map(async (juego) => {
-            if (juego.screenshots && juego.screenshots.length > 0) {
-                // Supongamos que juego.screenshots es un array de IDs y usas obtenerScreenshots para obtener los datos.
-                const screenshotsArr = await obtenerScreenshots([juego.screenshots[0]]);
-                if (screenshotsArr.length > 0) {
-                    let screenshotUrl = screenshotsArr[0].url;
-                    // Si la URL contiene "t_thumb", reemplázalo por "t_screenshot_huge" para mayor resolución.
-                    if (screenshotUrl.includes("t_thumb")) {
-                        screenshotUrl = screenshotUrl.replace("t_thumb", "t_screenshot_huge");
-                    }
-                    juego.screenshot = screenshotUrl;
+            if (juego.artworks && juego.artworks.length > 0) {
+                const artworksArr = await obtenerArtworks(juego.artworks.slice(0, 1));
+                if (artworksArr.length > 0) {
+                    juego.screenshot = artworksArr[0].url;
                 } else {
                     juego.screenshot = null;
                 }
@@ -460,7 +484,7 @@ const obtenerTop10 = async () => {
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            'fields id, name, total_rating, total_rating_count, cover; where total_rating_count > 1800; sort total_rating desc; limit 20;',
+            'fields id, name, total_rating, total_rating_count, cover; where total_rating_count > 1800; sort total_rating desc; limit 10;',
             {
                 headers: {
                     'Client-ID': clientId,
@@ -492,14 +516,14 @@ const obtenerNuevosLanzamientos = async () => {
         return cachedNuevos;
     }
     const currentTimestamp = Math.floor(Date.now() / 1000);
-    const oneMonthAgo = currentTimestamp - (30 * 24 * 60 * 60); // hace 30 días
+    const oneMonthAgo = currentTimestamp - (60 * 24 * 60 * 60); // hace 30 días
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            `fields id, name, first_release_date, cover;
-            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp};
-            sort first_release_date desc;
-            limit 20;`,
+            `fields id, name, first_release_date, cover, total_rating_count;
+            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} & total_rating_count > 10;
+            sort total_rating_count desc;
+            limit 10;`,
             {
                 headers: {
                     'Client-ID': clientId,
@@ -533,10 +557,10 @@ const obtenerProximosLanzamientos = async () => {
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            `fields id, name, first_release_date, cover;
-            where first_release_date > ${currentTimestamp} & first_release_date <= ${oneYearLater};
-            sort first_release_date asc;
-            limit 20;`,
+            `fields id, name, first_release_date, cover, hypes;
+            where first_release_date > ${currentTimestamp} & first_release_date <= ${oneYearLater} & hypes > 10 & cover != null & category = 0;
+            sort hypes desc;
+            limit 10;`,
             {
                 headers: {
                     'Client-ID': clientId,
@@ -561,6 +585,7 @@ const obtenerProximosLanzamientos = async () => {
 
 
 module.exports = {
+    obtenerArtworks,
     obtenerSliderPrincipal,
     obtenerNuevosLanzamientos,
     obtenerProximosLanzamientos,

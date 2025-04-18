@@ -1,8 +1,7 @@
 .wrapper {
-  overflow-x: auto; /* Permite el scroll horizontal */
+  overflow: hidden; /* Permite el scroll horizontal */
   scroll-behavior: smooth; /* Para desplazamiento suave */
   display: flex;    /* Los elementos se distribuyen en línea */
-  margin: 10px 0 10px 0;
   width: 900px;
 }
 
