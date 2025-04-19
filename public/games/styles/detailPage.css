@@ -90,6 +90,7 @@ nav ul li:active {
 section {
   position: relative;
   margin: auto;
+  padding-top: 60px;
   max-width: 1300px;
   min-width: 600px;
 }
@@ -101,6 +102,8 @@ section {
 
 .top-section{
   display: grid;
+  height: 450px;
+  overflow: hidden;
   grid-template-columns: 780px 500px;
   gap: 20px;
   margin: 20px 0 20px 0;
@@ -111,8 +114,59 @@ section {
   font-size: 2em;
 }
 
+.detail-container {
+  max-width: 100%;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-height: 100%;
+  padding-right: 10px;
+}
+
 .detail-container > p {
   margin-bottom: 10px;
+  word-break: break-word;
+}
+
+.rating-container {
+  position: relative;
+  width: 100%;
+  margin-top: 30px;
+}
+
+.rating-score {
+  position: absolute;
+  top: -30px;
+  right: 0;
+  background-color: #4caf50;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-weight: bold;
+  font-size: 2em;
+  color: white;
+  box-shadow: 0 0 5px rgba(0,0,0,0.5);
+}
+
+.rating-bar {
+  width: 100%;
+  height: 12px;
+  background-color: transparent;
+  display: flex;
+  border-radius: 8px;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.rating-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.rating-fill.verde {
+  background-color: #4caf50;
+}
+
+.rating-fill.rojo {
+  background-color: #f44336;
 }
 
 .resumen{
@@ -153,10 +207,53 @@ section {
   transform-origin: right center;
 }
 
+.webs-relacionadas {
+  margin: 30px 0 30px 0;
+}
+
+.webs-relacionadas h3 {
+  margin-bottom: 10px;
+  color: var(--color1);
+}
+
+.webs-relacionadas ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 12px;
+}
+
+.webs-relacionadas li a {
+  display: block;
+  text-align: center;
+  padding: 10px 15px;
+  background-color: #1f1f1f;
+  border-radius: 6px;
+  color: var(--white);
+  font-weight: bold;
+  text-decoration: none;
+  transition: all 0.2s ease-in-out;
+  word-break: break-word;
+}
+
+.webs-relacionadas li a:hover {
+  background-color: var(--color2);
+  color: black;
+}
+
+.titulo-slider{
+  width: 1000px;
+  margin: auto;
+}
+
 .slider-similares {
+  margin: auto;
   position: relative;
   display: flex;
   justify-content: center;
+  width: 1000px;
+  margin-top: 10px;
 }
 
 footer {
@@ -226,7 +323,7 @@ h6 {
   margin: 5px;
 }
 
-button {
+.registrate button {
   border: 0;
   background-image: linear-gradient(150deg, #e6190e, #e6552c, #e60e6a);
   border-radius: 8px;
@@ -238,7 +335,7 @@ button {
   transition: 0.3s;
 }
 
-button span {
+.registrate button span {
   background-color: #1f1f1f;
   font-weight: bold;
   padding: 5px 10px;
@@ -246,12 +343,12 @@ button span {
   transition: 0.3s;
 }
 
-button:hover span {
+.registrate button:hover span {
   background: none;
   color: black;
 }
 
-button:active {
+.registrate button:active {
   transform: scale(0.9);
 }
 

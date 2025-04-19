@@ -41,17 +41,25 @@ function buscarJuego(id) {
                         <h2 class="nombre-titulo">${data.name}</h2>
                         ${data.platforms ? `<p><strong>Plataformas:</strong> ${data.platforms.join(', ')}</p>` : ''}
                         ${data.first_release_date ? `<p><strong>Lanzamiento:</strong> ${data.first_release_date}</p>` : ''}
-                        <p class="resumen">${data.summary || 'No disponible'}</p>
-                        <p>${data.total_rating || 'No disponible'}</p>
-                        <p><strong>Votos:</strong> ${data.total_rating_count || 'No disponible'}</p>
+                        ${data.total_rating ? `
+                            <div class="rating-container">
+                                <p><strong>Votos:</strong> ${data.total_rating_count || 'No disponible'}</p>
+                                <div class="rating-score">${Math.round(data.total_rating)}</div>
+                                <div class="rating-bar">
+                                    <div class="rating-fill verde" style="width: ${data.total_rating}%;"></div>
+                                    <div class="rating-fill rojo" style="width: ${100 - data.total_rating}%;"></div>
+                                </div>
+                            </div>
+                        ` : '<p>Puntuación: No disponible</p>'}
+                        <p class="resumen">${data.summary}</p>
+                        ${data.updated_at ? `<p><strong>Última actualización:</strong> ${data.updated_at}</p>` : ''}
                     </div>  <!-- Fin de details-container -->
                 </div>  <!-- Fin de top-section -->
             `;
 
             contenido += `
                 <div class="bottom-section">
-                    ${data.updated_at ? `<p><strong>Última actualización:</strong> ${data.updated_at}</p>` : ''}
-                    <p> ${data.storyline || 'No disponible'}</p>
+                    <p>${data.storyline}</p>
                     ${data.genres ? `<p><strong>Géneros:</strong> ${data.genres.join(', ')}</p>` : ''}
                     ${data.themes ? `<p><strong>Temas:</strong> ${data.themes}</p>` : ''}
                     ${data.game_modes ? `<p><strong>Modos de juego:</strong> ${data.game_modes}</p>` : ''}
@@ -71,20 +79,24 @@ function buscarJuego(id) {
             }
 
             if (data.websites && data.websites.length > 0) {
-                contenido += `<h3>Sitios Web para más información</h3>`;
-                data.websites.forEach(url => {
-                    contenido += `<p><a href="${url}" target="_blank">${url}</a></p>`;
-                });
+                contenido += `
+                <div class="webs-relacionadas">
+                    <h3>Sitios Web para más información</h3>
+                    <ul>
+                        ${data.websites.map(url => {
+                            const dominio = url.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+                            return `<li><a href="${url}" target="_blank">${dominio}</a></li>`;
+                        }).join('')}
+                    </ul>
+                </div>
+            `;
             }
 
             if (data.similar_games && data.similar_games.length > 0) {
-                let similaresHTML = 
-                    `<div class="slider-similares">
-                        <div class="wrapper">
-                    `;
+                let sliderHTML = '';
                 data.similar_games.forEach(game => {
                     if (game.cover) {
-                        similaresHTML += `
+                        sliderHTML += `
                             <div class="item">
                                 <a href="/games/detail.html?id=${game.id}">
                                     <img src="${game.cover}" alt="Cover similar" />
@@ -92,10 +104,42 @@ function buscarJuego(id) {
                             </div>`;
                     }
                 });
-                similaresHTML += 
-                        `</div>
-                    </div>`;
-                contenido += similaresHTML;
+            
+                const sliderWrapper = document.createElement('div');
+                sliderWrapper.className = 'slider-wrapper';
+            
+                const sliderContainer = document.createElement('div');
+                sliderContainer.className = 'wrapper';
+                sliderContainer.id = 'slider-relacionados';
+                sliderContainer.innerHTML = sliderHTML;
+            
+                const arrowLeft = document.createElement('button');
+                arrowLeft.className = 'arrow-btn arrow-left';
+                arrowLeft.textContent = '‹';
+            
+                const arrowRight = document.createElement('button');
+                arrowRight.className = 'arrow-btn arrow-right';
+                arrowRight.textContent = '›';
+            
+                sliderWrapper.appendChild(arrowLeft);
+                sliderWrapper.appendChild(sliderContainer);
+                sliderWrapper.appendChild(arrowRight);
+            
+                arrowLeft.addEventListener('click', () => {
+                    sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
+                });
+            
+                arrowRight.addEventListener('click', () => {
+                    sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
+                });
+            
+                contenido += `<h3 class="titulo-slider">Juegos relacionados</h3>`;
+                setTimeout(() => {
+                    const contenedorSlider = document.createElement('div');
+                    contenedorSlider.className = 'slider-similares';
+                    document.getElementById('resultado').appendChild(contenedorSlider);
+                    contenedorSlider.appendChild(sliderWrapper);
+                }, 0);
             }
 
             resultado.innerHTML = contenido;
@@ -106,6 +150,20 @@ function buscarJuego(id) {
         });
 }
 
+//Crea la barra de puntuación
+function aplicarBarraDePuntuacion(puntuacion) {
+    const barra = document.querySelector(".rating-bar");
+    const verde = barra.querySelector(".rating-fill.verde");
+    const rojo = barra.querySelector(".rating-fill.rojo");
+
+    const porcentajeVerde = Math.min(puntuacion, 100);
+    const porcentajeRojo = 100 - porcentajeVerde;
+
+    verde.style.width = `${porcentajeVerde}%`;
+    rojo.style.width = `${porcentajeRojo}%`;
+}
+
+// Cargar el slider principal
 async function cargarSliderPrincipal() {
     try {
         const response = await fetch('/api/juego/slider-principal');

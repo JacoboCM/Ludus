@@ -155,9 +155,15 @@ body>h3{
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 200px; /* altura del difuminado */
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, var(--black) 100%);
-  pointer-events: none; /* no interfiere con clics */
+  height: 200px;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 25%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.5) 80%,
+    var(--black) 100%
+  );
+  pointer-events: none;
   z-index: 2;
 }
 
@@ -211,8 +217,8 @@ body>h3{
 }
 
 .slider-dots .dot {
-  width: 12px;
-  height: 12px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
   background-color: rgba(255, 255, 255, 0.4);
   cursor: pointer;
@@ -233,6 +239,7 @@ body>h3{
   position: relative;
   margin: auto;
   width: 1000px;
+  overflow: visible;
 }
 
 .slider-secundario .slider-wrapper {
@@ -244,23 +251,25 @@ body>h3{
   margin: 10px 0 10px 0;
 }
 
-.wrapper {
+.slider-wrapper .wrapper {
   overflow: hidden; /* Permite el scroll horizontal */
   scroll-behavior: smooth; /* Para desplazamiento suave */
   display: flex;    /* Los elementos se distribuyen en línea */
-  width: 900px;
+  width: 1000px;
 }
 
-.item {
+.slider-wrapper .wrapper .item {
   display: flex;
   flex: 0 0 calc(100% / 5); /* Cada item ocupa el 20% del ancho del contenedor */
   box-sizing: border-box;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
-.item img{
+.slider-wrapper .wrapper .item img{
   height: 230px;
   width: 180px;
+  border-radius: 5px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
 }
 
 .arrow-btn {
@@ -273,7 +282,7 @@ body>h3{
   font-size: 4rem;
   cursor: pointer;
   z-index: 10;
-  width: 40px;
+  width: 30px;
   height: 40px;
   display: flex;
   align-items: center;
@@ -286,9 +295,8 @@ body>h3{
 }
 
 .arrow-right {
-  right: 60px;
+  right: -40px;
 }
-
 
 footer {
   background-color: transparent;

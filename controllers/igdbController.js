@@ -48,7 +48,7 @@ const tablas = {
 };
 
 const traducirTexto = async (texto, targetLang = 'ES') => {
-    if (!texto) return 'No disponible';
+    if (!texto) return 'Historia No disponible';
 
     try {
         const response = await axios.post(
