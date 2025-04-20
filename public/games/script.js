@@ -18,7 +18,7 @@ function buscarJuego(id) {
             */
             contenido += `
                 <div class="top-section">
-                    <div class="video-container">`;
+                    <div class="video-container contenedor-blur">`;
             if (data.videos && data.videos.length > 0) {
                 data.videos.forEach(video => {
                     contenido += `
@@ -37,7 +37,7 @@ function buscarJuego(id) {
 
             contenido += `
                     </div>  <!-- Fin de video-container -->
-                    <div class="detail-container">
+                    <div class="detail-container contenedor-blur">
                         <h2 class="nombre-titulo">${data.name}</h2>
                         ${data.platforms ? `<p><strong>Plataformas:</strong> ${data.platforms.join(', ')}</p>` : ''}
                         ${data.first_release_date ? `<p><strong>Lanzamiento:</strong> ${data.first_release_date}</p>` : ''}
@@ -52,13 +52,13 @@ function buscarJuego(id) {
                             </div>
                         ` : '<p>Puntuación: No disponible</p>'}
                         <p class="resumen">${data.summary}</p>
-                        ${data.updated_at ? `<p><strong>Última actualización:</strong> ${data.updated_at}</p>` : ''}
+                        ${data.updated_at ? `<p class="ultima"><strong>Última actualización:</strong> ${data.updated_at}</p>` : ''}
                     </div>  <!-- Fin de details-container -->
                 </div>  <!-- Fin de top-section -->
             `;
 
             contenido += `
-                <div class="bottom-section">
+                <div class="bottom-section contenedor-blur">
                     <p>${data.storyline}</p>
                     ${data.genres ? `<p><strong>Géneros:</strong> ${data.genres.join(', ')}</p>` : ''}
                     ${data.themes ? `<p><strong>Temas:</strong> ${data.themes}</p>` : ''}
@@ -70,17 +70,25 @@ function buscarJuego(id) {
             `;
 
             if (data.screenshots && data.screenshots.length > 0) {
-                let screenshotsHTML = `<div class="screenshots-container">`;
+                let screenshotsHTML = `<div class="screenshots-container contenedor-blur">`;
                 data.screenshots.forEach(screenshot => {
                     screenshotsHTML += `<img class="screenshot" src="${screenshot.url}" alt="Screenshot ${screenshot.id}" />`;
                 });
                 screenshotsHTML += `</div>`;
                 contenido += screenshotsHTML;
+                setTimeout(() => {
+                    const screenshots = document.querySelectorAll(".screenshot");
+                    screenshots.forEach(img => {
+                        img.addEventListener("click", () => {
+                            basicLightbox.create(`<img src="${img.src}" alt="${img.alt}" style="max-width: 90vw; max-height: 90vh;" />`).show();
+                        });
+                    });
+                }, 0);
             }
 
             if (data.websites && data.websites.length > 0) {
                 contenido += `
-                <div class="webs-relacionadas">
+                <div class="webs-relacionadas contenedor-blur">
                     <h3>Sitios Web para más información</h3>
                     <ul>
                         ${data.websites.map(url => {
