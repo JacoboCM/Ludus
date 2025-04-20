@@ -5,10 +5,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ludus</title>
+    <link rel="stylesheet" href="styles/buscador.css" />
     <link rel="stylesheet" href="styles/style.css" />
     <link rel="stylesheet" href="styles/components/rowCarousel.css" />
     <link rel="stylesheet" href="styles/components/modal.css" />
 </head>
+
 <body>
     <header>
         <nav>
@@ -45,18 +47,16 @@
             </ul>
         </nav>
     </header>
-    <section class="slider-principal">
-        <div class="wrapper-principal" id="slider-principal"></div>
-    </section>
-    <section class="slider-secundario">
-        <h3>Mejor puntuados</h3>
-        <div class="wrapper" id="slider-top10"></div>
-        <h3>Nuevos lanzamiento</h3>
-        <div class="wrapper" id="slider-nuevos"></div>
-        <h3>Próximos juegos</h3>
-        <div class="wrapper" id="slider-proximos"></div>
-    </section>
+    <main class="buscador-container">
+        <section class="buscador-box">
+            <input type="text" id="input-buscador" placeholder="Busca tu videojuego favorito..." />
+            <button id="btn-buscar">🔍</button>
+        </section>
 
+        <section id="resultados" class="resultados-grid">
+            <!-- Aquí se insertan dinámicamente los resultados -->
+        </section>
+    </main>
     <footer>
         <section class="rrss">
             <img src="../assets/other_assets/ico_ig.png" alt="Síguenos en Instagram" width="40" height="40" />
@@ -156,9 +156,11 @@
         </div>
     </div>
 
+    <script src="buscador.js"></script>
     <script src="script.js"></script>
     <!--<script src="../scripts/components/carousel.js"></script>-->
     <!--<script src="/scripts/components/rowCarousel.js"></script>-->
     <script src="../scripts/components/modal.js"></script>
 </body>
+
 </html>

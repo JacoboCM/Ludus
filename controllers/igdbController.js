@@ -47,6 +47,43 @@ const tablas = {
     //game_localizations: 'game_localizations'
 };
 
+// Función para buscar juegos por nombre mediante el buscador
+const buscarJuegoPorNombre = async (query) => {
+    try {
+        const cacheKey = `busqueda_${query.toLowerCase()}`;
+        const cachedResult = cache.get(cacheKey);
+        if (cachedResult) {
+            return cachedResult;
+        }
+
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            `search "${query}";
+            fields id, name, cover;`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        const juegos = await Promise.all(response.data.map(async (juego) => {
+            if (juego.cover) {
+                juego.cover = await obtenerCover(juego.cover);
+            }
+            return juego;
+        }));
+
+        cache.set(cacheKey, juegos);
+        return juegos;
+    } catch (error) {
+        console.error('Error al buscar juegos por nombre:', error.response?.data || error.message);
+        return [];
+    }
+};
+
 const traducirTexto = async (texto, targetLang = 'ES') => {
     if (!texto) return 'Historia No disponible';
 
@@ -585,6 +622,7 @@ const obtenerProximosLanzamientos = async () => {
 
 
 module.exports = {
+    buscarJuegoPorNombre,
     obtenerArtworks,
     obtenerSliderPrincipal,
     obtenerNuevosLanzamientos,

@@ -2,6 +2,19 @@ const express = require('express');
 const router = express.Router();
 const igdbController = require('../controllers/igdbController');
 
+router.get('/buscar', async (req, res) => {
+    const nombre = req.query.nombre;
+    if (!nombre) return res.status(400).json({ error: 'Nombre requerido' });
+
+    try {
+        const resultados = await igdbController.buscarJuegoPorNombre(nombre);
+        res.json(resultados);
+    } catch (error) {
+        console.error('Error en la búsqueda:', error.message);
+        res.status(500).json({ error: 'Error en la búsqueda de juegos' });
+    }
+});
+
 router.get('/slider-principal', async (req, res) => {
     try {
         const sliderData = await igdbController.obtenerSliderPrincipal();
