@@ -1,30 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ludus - Videojuegos</title>
-    <link rel="stylesheet" href="styles/style.css" />
-    <script type="module" src="/components/nav.js"></script>
-    <script type="module" src="/components/footer.js"></script>
-  </head>
-  <body>
-    <ludus-nav></ludus-nav>
-    <section class="slider-principal">
-      <div class="wrapper-principal" id="slider-principal"></div>
-    </section>
 
-    <section class="slider-secundario">
-      <h3>Top Rated Games</h3>
-      <div class="wrapper" id="slider-top10"></div>
-      <h3>Popular Games</h3>
-      <div class="wrapper" id="slider-nuevos"></div>
-      <h3>Upcoming Games</h3>
-      <div class="wrapper" id="slider-proximos"></div>
-    </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ludus - Videojuegos</title>
+  <link rel="stylesheet" href="styles/style.css" />
+  <script type="module" src="/components/nav.js"></script>
+  <script type="module" src="/components/footer.js"></script>
+</head>
 
-    <main></main>
-    <ludus-footer></ludus-footer>
-    <script src="script.js" type="module"></script>
-  </body>
+<body>
+  <ludus-nav></ludus-nav>
+  <section class="slider-principal">
+    <div class="wrapper-principal" id="slider-principal"></div>
+  </section>
+
+  <section class="slider-secundario">
+    <h3>Top 10</h3>
+    <div class="wrapper" id="slider-top10"></div>
+    <h3>Nuevo lanzamientos</h3>
+    <div class="wrapper" id="slider-nuevos"></div>
+    <h3>Proximos lanzamientos</h3>
+    <div class="wrapper" id="slider-proximos"></div>
+    <h3>Nuevo lanzamientos PS5</h3>
+    <div id="slider-nuevos-ps5" class="wrapper"></div>
+    <h3>Nuevo lanzamientos XBOX</h3>
+    <div id="slider-nuevos-xbox" class="wrapper"></div>
+    <h3>Nuevo lanzamientos PC</h3>
+    <div id="slider-nuevos-pc" class="wrapper"></div>
+  </section>
+
+  <main></main>
+  <ludus-footer></ludus-footer>
+  <script src="script.js" type="module"></script>
+</body>
 </html>

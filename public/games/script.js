@@ -223,14 +223,11 @@ async function cargarSliderPrincipal() {
     }
 }
 
-//document.addEventListener("DOMContentLoaded", cargarSliderPrincipal);
-
 async function cargarTop10() {
     try {
         // Asegúrate de que la URL del fetch coincida con la ruta montada en tu servidor.
         const response = await fetch('/api/juego/top10');
         const top10Games = await response.json();
-        console.log("Top 10 Games:", top10Games);
 
         const sliderContainer = document.getElementById('slider-top10');
         if (!sliderContainer) {
@@ -274,9 +271,6 @@ async function cargarTop10() {
             sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
         });
 
-        // Opcional: Aquí puedes inicializar la funcionalidad de desplazamiento o agregar eventos a las flechas
-        // Por ejemplo, si usas una librería o tienes funciones propias para mover el slider.
-
     } catch (error) {
         console.error('Error al cargar Top 10:', error);
     }
@@ -284,7 +278,7 @@ async function cargarTop10() {
 
 async function cargarNuevos() {
     try {
-        const response = await fetch('/api/juego/nuevos'); // O '/api/juegos/nuevos', según cómo montaste la ruta.
+        const response = await fetch('/api/juego/nuevos'); 
         const nuevosGames = await response.json();
         const sliderContainer = document.getElementById('slider-nuevos');
         let sliderHTML = '';
@@ -372,6 +366,51 @@ async function cargarProximos() {
     }
 }
 
+async function cargarNuevosPorPlataforma(plataforma, idContenedor) {
+    try {
+        const response = await fetch(`/api/juego/nuevos/${plataforma}`);
+        const nuevosGames = await response.json();
+        const sliderContainer = document.getElementById(idContenedor);
+        let sliderHTML = '';
+
+        nuevosGames.forEach(game => {
+            sliderHTML += `
+                <div class="item">
+                    <a href="/games/detail.html?id=${game.id}">
+                        <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                    </a>
+                </div>
+            `;
+        });
+        sliderContainer.innerHTML = sliderHTML;
+        // Crear botones de flechas
+        const arrowLeft = document.createElement('button');
+        arrowLeft.className = 'arrow-btn arrow-left';
+        arrowLeft.textContent = '‹';
+
+        const arrowRight = document.createElement('button');
+        arrowRight.className = 'arrow-btn arrow-right';
+        arrowRight.textContent = '›';
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = 'slider-wrapper';
+        sliderContainer.parentElement.insertBefore(sliderWrapper, sliderContainer);
+        sliderWrapper.appendChild(arrowLeft);
+        sliderWrapper.appendChild(sliderContainer);
+        sliderWrapper.appendChild(arrowRight);
+
+        arrowLeft.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+
+        arrowRight.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+    } catch (error) {
+        console.error(`Error al cargar nuevos de ${plataforma}:`, error);
+    }
+}
+
 function getQueryParam(param) {
     const params = new URLSearchParams(window.location.search);
     return params.get(param);
@@ -388,11 +427,25 @@ document.addEventListener("DOMContentLoaded", () => {
     if (document.getElementById("slider-top10")) {
         cargarTop10();
     }
+
     if (document.getElementById("slider-nuevos")) {
         cargarNuevos();
     }
+
     if (document.getElementById("slider-proximos")) {
         cargarProximos();
+    }
+
+    if (document.getElementById("slider-nuevos-ps5")) {
+        cargarNuevosPorPlataforma('ps5', 'slider-nuevos-ps5');
+    }
+    
+    if (document.getElementById("slider-nuevos-xbox")) {
+        cargarNuevosPorPlataforma('xbox', 'slider-nuevos-xbox');
+    }
+
+    if (document.getElementById("slider-nuevos-pc")) {
+        cargarNuevosPorPlataforma('pc', 'slider-nuevos-pc');
     }
 
     // Si la URL tiene un parámetro "id", se asume que se está en la página de detalle

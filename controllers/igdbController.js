@@ -620,8 +620,58 @@ const obtenerProximosLanzamientos = async () => {
     }
 };
 
+const obtenerNuevosPorPlataforma = async (plataformaID) => {
+    const cacheKey = `nuevos_${plataformaID}`;
+    const cachedData = cache.get(cacheKey);
+    if (cachedData) {
+        return cachedData;
+    }
+
+    const today = Math.floor(Date.now() / 1000);
+    const thirtyDaysAgo = today - (60 * 24 * 60 * 60);
+
+    const consulta = `
+        fields id, name, cover, platforms, first_release_date;
+        where platforms = (${plataformaID})
+        & first_release_date >= ${thirtyDaysAgo}
+        & first_release_date <= ${today}
+        & cover != null;
+        sort first_release_date desc;
+        limit 10;
+    `;
+
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/games',
+            consulta,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        const juegos = await Promise.all(response.data.map(async (juego) => {
+            if (juego.cover) {
+                juego.cover = await obtenerCover(juego.cover);
+            }
+            return juego;
+        }));
+
+        cache.set(cacheKey, juegos);
+        return juegos;
+    } catch (error) {
+        console.error('Error al obtener nuevos lanzamientos por plataforma:', error.message);
+        throw error;
+    }
+};
+
+
 
 module.exports = {
+    obtenerNuevosPorPlataforma,
     buscarJuegoPorNombre,
     obtenerArtworks,
     obtenerSliderPrincipal,
