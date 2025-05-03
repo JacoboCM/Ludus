@@ -366,13 +366,68 @@ async function cargarProximos() {
     }
 }
 
-async function cargarNuevosPorPlataforma(plataforma, idContenedor) {
+// Nueva función: cargarTop10PorRuta
+async function cargarTop10PorRuta(ruta, idContenedor) {
     try {
-        const response = await fetch(`/api/juego/nuevos/${plataforma}`);
-        const nuevosGames = await response.json();
+        const response = await fetch(ruta);
+        const juegos = await response.json();
+        console.log('Respuesta recibida para', ruta, juegos);
         const sliderContainer = document.getElementById(idContenedor);
         let sliderHTML = '';
+        if (!Array.isArray(juegos)) {
+            console.error("Respuesta inválida para", ruta, juegos);
+            return;
+        }
+        juegos.forEach(game => {
+            sliderHTML += `
+                <div class="item">
+                    <a href="/games/detail.html?id=${game.id}">
+                        <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                    </a>
+                </div>
+            `;
+        });
+        sliderContainer.innerHTML = sliderHTML;
 
+        const arrowLeft = document.createElement('button');
+        arrowLeft.className = 'arrow-btn arrow-left';
+        arrowLeft.textContent = '‹';
+
+        const arrowRight = document.createElement('button');
+        arrowRight.className = 'arrow-btn arrow-right';
+        arrowRight.textContent = '›';
+
+        const sliderWrapper = document.createElement('div');
+        sliderWrapper.className = 'slider-wrapper';
+        sliderContainer.parentElement.insertBefore(sliderWrapper, sliderContainer);
+        sliderWrapper.appendChild(arrowLeft);
+        sliderWrapper.appendChild(sliderContainer);
+        sliderWrapper.appendChild(arrowRight);
+
+        arrowLeft.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+
+        arrowRight.addEventListener('click', () => {
+            sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
+        });
+
+    } catch (error) {
+        console.error(`Error al cargar juegos de ${ruta}:`, error);
+    }
+}
+
+async function cargarNuevosPorPlataforma(plataforma, idContenedor) {
+    try {
+        const response = await fetch(`/api/juego/exclusivos/${plataforma}`);
+        const nuevosGames = await response.json();
+        console.log('Respuesta recibida para', plataforma, nuevosGames);
+        const sliderContainer = document.getElementById(idContenedor);
+        let sliderHTML = '';
+        if (!Array.isArray(nuevosGames)) {
+            console.error("Respuesta inválida para", plataforma, nuevosGames);
+            return;
+        }
         nuevosGames.forEach(game => {
             sliderHTML += `
                 <div class="item">
@@ -436,18 +491,19 @@ document.addEventListener("DOMContentLoaded", () => {
         cargarProximos();
     }
 
-    if (document.getElementById("slider-nuevos-ps5")) {
-        cargarNuevosPorPlataforma('ps5', 'slider-nuevos-ps5');
-    }
-    
-    if (document.getElementById("slider-nuevos-xbox")) {
-        cargarNuevosPorPlataforma('xbox', 'slider-nuevos-xbox');
+    //Cargar top10 por ruta específica para PS5, XBOX+PC y Nintendo
+    if (document.getElementById("slider-top-consola")) {
+        cargarTop10PorRuta('/api/juego/top10/consola', 'slider-top-consola');
     }
 
-    if (document.getElementById("slider-nuevos-pc")) {
-        cargarNuevosPorPlataforma('pc', 'slider-nuevos-pc');
+    if (document.getElementById("slider-top-pc")) {
+        cargarTop10PorRuta('/api/juego/top10/pc', 'slider-top-pc');
     }
-
+/*
+    if (document.getElementById("slider-top-nintendo")) {
+        cargarTop10PorRuta('/api/juego/top10/nintendo', 'slider-top-nintendo');
+    }
+*/
     // Si la URL tiene un parámetro "id", se asume que se está en la página de detalle
     const gameId = getQueryParam("id");
     if (gameId && document.getElementById("resultado")) {

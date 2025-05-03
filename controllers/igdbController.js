@@ -164,6 +164,38 @@ const obtenerCover = async (id) => {
     }
 };
 
+// Obtiene varias portadas en un solo request
+const obtenerCoversEnLote = async (ids) => {
+    if (!ids || ids.length === 0) return {};
+
+    try {
+        const response = await axios.post(
+            'https://api.igdb.com/v4/covers',
+            `fields id, url, image_id; where id = (${ids.join(',')});`,
+            {
+                headers: {
+                    'Client-ID': clientId,
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Accept': 'application/json'
+                }
+            }
+        );
+
+        const coversMap = {};
+        response.data.forEach(cover => {
+            let url = cover.url;
+            if (url.startsWith("//")) url = "https:" + url;
+            if (url.includes("t_thumb")) url = url.replace("t_thumb", "t_cover_big");
+            coversMap[cover.id] = url;
+        });
+
+        return coversMap;
+    } catch (error) {
+        console.error('Error al obtener covers en lote:', error.response?.data || error.message);
+        return {};
+    }
+};
+
 const obtenerCoversSimilares = async (ids) => {
     try {
         const response = await axios.post(
@@ -423,7 +455,7 @@ const obtenerJuego = async (gameId) => {
 
     // Procesa juegos similares
     if (juego.similar_games && Array.isArray(juego.similar_games)) {
-            juego.similar_games = await obtenerCoversSimilares(juego.similar_games);
+        juego.similar_games = await obtenerCoversSimilares(juego.similar_games);
     }
 
     // Procesa las URLs de sitios web
@@ -476,8 +508,10 @@ const obtenerSliderPrincipal = async () => {
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            `fields id, name, first_release_date, artworks, total_rating_count;
-            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} & total_rating_count > 30;
+            `fields id, name, first_release_date, artworks, total_rating_count, hypes;
+            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} 
+            & hypes > 20
+            & total_rating_count > 30;
             sort total_rating_count desc;
             limit 5;`,
             {
@@ -530,15 +564,15 @@ const obtenerTop10 = async () => {
                 }
             }
         );
-        // Procesa cada juego para convertir la id de cover en la URL correspondiente usando obtenerCover.
-        const juegos = await Promise.all(response.data.map(async (juego) => {
-            if (juego.cover) {
-                // Se reemplaza game.cover (que es un id) por la URL real usando obtenerCover.
-                juego.cover = await obtenerCover(juego.cover);
-            }
-            return juego;
-        }));
-        // Almacena el resultado en caché
+        // Optimización: obtener todas las covers en lote
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
+
         cache.set('top10', juegos);
         return juegos;
     } catch (error) {
@@ -552,13 +586,15 @@ const obtenerNuevosLanzamientos = async () => {
     if (cachedNuevos) {
         return cachedNuevos;
     }
+
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const oneMonthAgo = currentTimestamp - (60 * 24 * 60 * 60); // hace 30 días
+
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
             `fields id, name, first_release_date, cover, total_rating_count;
-            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} & total_rating_count > 10;
+            where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} & total_rating_count > 10 & cover != null;
             sort total_rating_count desc;
             limit 10;`,
             {
@@ -569,13 +605,15 @@ const obtenerNuevosLanzamientos = async () => {
                 }
             }
         );
-        // Procesar cada juego para obtener la URL de cover (usando obtenerCover)
-        const juegos = await Promise.all(response.data.map(async (juego) => {
-            if (juego.cover) {
-                juego.cover = await obtenerCover(juego.cover);
-            }
-            return juego;
-        }));
+
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
+
         cache.set('nuevos', juegos);
         return juegos;
     } catch (error) {
@@ -589,13 +627,19 @@ const obtenerProximosLanzamientos = async () => {
     if (cachedProximos) {
         return cachedProximos;
     }
+
     const currentTimestamp = Math.floor(Date.now() / 1000);
     const oneYearLater = currentTimestamp + (365 * 24 * 60 * 60);
+
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
             `fields id, name, first_release_date, cover, hypes;
-            where first_release_date > ${currentTimestamp} & first_release_date <= ${oneYearLater} & hypes > 10 & cover != null & category = 0;
+            where first_release_date > ${currentTimestamp}
+            & first_release_date <= ${oneYearLater}
+            & hypes > 10
+            & cover != null
+            & category = 0;
             sort hypes desc;
             limit 10;`,
             {
@@ -606,12 +650,15 @@ const obtenerProximosLanzamientos = async () => {
                 }
             }
         );
-        const juegos = await Promise.all(response.data.map(async (juego) => {
-            if (juego.cover) {
-                juego.cover = await obtenerCover(juego.cover);
-            }
-            return juego;
-        }));
+
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
+
         cache.set('proximos', juegos);
         return juegos;
     } catch (error) {
@@ -620,58 +667,138 @@ const obtenerProximosLanzamientos = async () => {
     }
 };
 
-const obtenerNuevosPorPlataforma = async (plataformaID) => {
-    const cacheKey = `nuevos_${plataformaID}`;
-    const cachedData = cache.get(cacheKey);
-    if (cachedData) {
-        return cachedData;
-    }
-
-    const today = Math.floor(Date.now() / 1000);
-    const thirtyDaysAgo = today - (60 * 24 * 60 * 60);
-
-    const consulta = `
-        fields id, name, cover, platforms, first_release_date;
-        where platforms = (${plataformaID})
-        & first_release_date >= ${thirtyDaysAgo}
-        & first_release_date <= ${today}
-        & cover != null;
-        sort first_release_date desc;
-        limit 10;
-    `;
+// Top 10 juegos de PC
+const obtenerTop10Pc = async () => {
+    const cacheKey = 'top10Pc';
+    const cached = cache.get(cacheKey);
+    if (cached) return cached;
 
     try {
-        const response = await axios.post(
-            'https://api.igdb.com/v4/games',
-            consulta,
-            {
-                headers: {
-                    'Client-ID': clientId,
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Accept': 'application/json'
-                }
+        const consulta = `
+            fields id, name, cover, total_rating, hypes, total_rating_count;
+            where platforms = [6]
+            & total_rating != null
+            & total_rating_count > 600
+            & hypes > 30
+            & cover != null;
+            sort total_rating desc;
+            limit 10;
+        `;
+        const response = await axios.post('https://api.igdb.com/v4/games', consulta, {
+            headers: {
+                'Client-ID': clientId,
+                'Authorization': `Bearer ${accessToken}`,
+                'Accept': 'application/json'
             }
-        );
+        });
 
-        const juegos = await Promise.all(response.data.map(async (juego) => {
-            if (juego.cover) {
-                juego.cover = await obtenerCover(juego.cover);
-            }
-            return juego;
-        }));
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
 
         cache.set(cacheKey, juegos);
         return juegos;
+
     } catch (error) {
-        console.error('Error al obtener nuevos lanzamientos por plataforma:', error.message);
+        console.error('Error al obtener top 10 PC:', error.response?.data || error.message);
         throw error;
     }
 };
 
+// Top 10 juegos de PS5/PS4/Xbox/Nintendo
+const obtenerTop10Consola = async () => {
+    const cacheKey = 'top10Consola';
+    const cached = cache.get(cacheKey);
+    if (cached) return cached;
 
+    try {
+        const consulta = `
+            fields id, name, cover, total_rating, hypes, total_rating_count;
+            where platforms = (48, 130, 167, 169)
+            & total_rating != null
+            & total_rating_count > 600
+            & hypes > 20
+            & cover != null;
+            sort total_rating desc;
+            limit 10;
+        `;
 
+        const response = await axios.post('https://api.igdb.com/v4/games', consulta, {
+            headers: {
+                'Client-ID': clientId,
+                'Authorization': `Bearer ${accessToken}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
+
+        cache.set(cacheKey, juegos);
+        return juegos;
+
+    } catch (error) {
+        console.error('Error al obtener top 10 Consola:', error.response?.data || error.message);
+        throw error;
+    }
+};
+/*
+// Top 10 juegos de Nintendo (Switch, Wii U)
+const obtenerTop10Nintendo = async () => {
+    const cacheKey = 'top10nintendo';
+    const cached = cache.get(cacheKey);
+    if (cached) return cached;
+
+    try {
+        const consulta = `
+            fields id, name, cover, total_rating, hypes, total_rating_count;
+            where (platforms = 130 | platforms = 41)
+            & total_rating != null
+            & total_rating_count > 50
+            & hypes > 5
+            & cover != null;
+            sort total_rating desc;
+            limit 10;
+        `;
+
+        const response = await axios.post('https://api.igdb.com/v4/games', consulta, {
+            headers: {
+                'Client-ID': clientId,
+                'Authorization': `Bearer ${accessToken}`,
+                'Accept': 'application/json'
+            }
+        });
+
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
+
+        cache.set(cacheKey, juegos);
+        return juegos;
+
+    } catch (error) {
+        console.error('Error al obtener top 10 Nintendo:', error.response?.data || error.message);
+        throw error;
+    }
+};
+*/
 module.exports = {
-    obtenerNuevosPorPlataforma,
+    obtenerTop10Pc,
+    obtenerTop10Consola,
+    //obtenerTop10Nintendo,
     buscarJuegoPorNombre,
     obtenerArtworks,
     obtenerSliderPrincipal,
@@ -681,6 +808,7 @@ module.exports = {
     obtenerJuego,
     obtenerNombres,
     obtenerCover,
+    obtenerCoversEnLote,
     obtenerInvolvedCompanies,
     obtenerCompanies,
     obtenerVideos,
