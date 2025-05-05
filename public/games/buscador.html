@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="styles/buscador.css" />
     <link rel="stylesheet" href="styles/style.css" />
     <script type="module" src="/components/nav.js"></script>
+    <script src="buscador.js" type="module"></script>
   </head>
 
   <body>
@@ -20,9 +21,11 @@
         />
         <button id="btn-buscar">🔍</button>
       </section>
-
       <section id="resultados" class="resultados-grid">
         <!-- Aquí se insertan dinámicamente los resultados -->
+      </section>
+      <section id="resultados-multimedia" class="resultados-grid">
+        <!-- Aquí se insertan dinámicamente los resultados de películas/series -->
       </section>
     </main>
     <footer>
@@ -93,7 +96,5 @@
         </li>
       </ul>
     </footer>
-
-    <script src="buscador.js" type="module"></script>
   </body>
 </html>
