@@ -72,4 +72,34 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.get('/top10/consola', async (req, res) => {
+    try {
+        const resultado = await igdbController.obtenerTop10Consola();
+        res.json(resultado);
+    } catch (error) {
+        console.error('Error en endpoint top10/consola:', error.message);
+        res.status(500).json({ error: 'Error al obtener Top 10 Consola' });
+    }
+});
+
+router.get('/top10/pc', async (req, res) => {
+    try {
+        const resultado = await igdbController.obtenerTop10Pc();
+        res.json(resultado);
+    } catch (error) {
+        console.error('Error en endpoint top10/pc:', error.message);
+        res.status(500).json({ error: 'Error al obtener Top 10 PC' });
+    }
+});
+/*
+router.get('/top10/nintendo', async (req, res) => {
+    try {
+        const resultado = await igdbController.obtenerTop10Nintendo();
+        res.json(resultado);
+    } catch (error) {
+        console.error('Error en endpoint top10/nintendo:', error.message);
+        res.status(500).json({ error: 'Error al obtener Top 10 Nintendo' });
+    }
+});
+*/
 module.exports = router;
