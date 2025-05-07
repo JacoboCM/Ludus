@@ -1,75 +1,78 @@
 .buscador-container {
-    max-width: 1000px;
-    margin: 100px auto 40px;
-    padding: 20px;
-    text-align: center;
+  max-width: 1000px;
+  margin: 100px auto 40px;
+  padding: 20px;
+  text-align: center;
 }
 
 .buscador-box {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 #input-buscador {
-    width: 60%;
-    padding: 12px;
-    font-size: 1.1rem;
-    border-radius: 6px;
-    border: 1px solid #ccc;
+  width: 60%;
+  padding: 12px;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
 
 #btn-buscar {
-    padding: 12px 20px;
-    font-size: 1.1rem;
-    border-radius: 6px;
-    background-color: var(--color1);
-    color: white;
-    border: none;
-    cursor: pointer;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  border-radius: 6px;
+  background-color: var(--color1);
+  color: white;
+  border: none;
+  cursor: pointer;
 }
 
 h3.resultado-titulo {
-    text-align: left;
-    font-size: 1.2rem;
-    color: var(--white);
-    margin-top: 50px;
-    margin-bottom: 10px;
+  text-align: left;
+  font-size: 1.2rem;
+  color: var(--white);
+  margin-top: 50px;
+  margin-bottom: 10px;
 }
 
 .resultados-grid {
-    margin-top: 30px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 170px);
-    gap: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .resultados-item {
-    background-color: #111;
-    border-radius: 8px;
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    cursor: pointer;
-    width: 170px;
-    margin: 0 auto;
-    border-radius: 5px;
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+  background-color: #111;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  width: 170px;
+  margin: 0;
+  border-radius: 5px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
 }
 
 .resultados-item:hover {
-    transform: scale(1.05);
+  transform: scale(1.05);
 }
 
 .resultados-item img {
-    width: 100%;
-    height: 220px;
-    object-fit: cover;
-    display: block;
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
 }
 
 .resultados-item p {
-    padding: 10px;
-    font-size: 0.9rem;
-    text-align: center;
+  padding: 10px;
+  font-size: 0.9rem;
+  text-align: center;
 }
