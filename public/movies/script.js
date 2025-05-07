@@ -1,48 +1,48 @@
 import {
   fetchContent,
-  populateSlider,
-  createContentCard,
+  TMDB_IMAGE_BASE_URL,
 } from "../scripts/services/tmdbService.js";
 
+async function populateSlider(sliderId, type, endpoint) {
+  const slider = document.getElementById(sliderId);
+  if (!slider) return;
+
+  const content = await fetchContent(type, endpoint);
+  content.slice(0, 10).forEach((item) => {
+    const card = document.createElement("slider-card");
+
+    // Set the properties for the slider-card component
+    card.title = type === "movie" ? item.title : item.name;
+    card.imageUrl = `${TMDB_IMAGE_BASE_URL}/w500${item.poster_path}`;
+    card.releaseDate = new Date(
+      type === "movie" ? item.release_date : item.first_air_date
+    ).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+    card.rating = item.vote_average;
+    card.id = item.id;
+    card.type = type;
+
+    slider.appendChild(card);
+  });
+}
+
 // Initialize the page
-async function initializeMoviesPage() {
+async function initializePage() {
   try {
-    // Populate main slider with top rated movies
-    const mainMovies = await fetchContent("movie", "top_rated");
-    const mainSlider = document.getElementById("slider-principal");
-    mainMovies.slice(0, 10).forEach((movie) => {
-      const card = createContentCard(movie, "movie");
-      mainSlider.appendChild(card);
-    });
+    // Populate main slider (now playing movies)
+    // await populateSlider("slider-principal", "movie", "now_playing");
 
-    // Populate top rated movies slider
-    const topRatedMovies = await fetchContent("movie", "top_rated");
-    const topRatedSlider = document.getElementById("slider-top10");
-    topRatedMovies.slice(0, 10).forEach((movie) => {
-      const card = createContentCard(movie, "movie");
-      
-      topRatedSlider.appendChild(card);
-    });
-
-    // Populate now playing movies slider
-    const nowPlayingMovies = await fetchContent("movie", "now_playing");
-    const nowPlayingSlider = document.getElementById("slider-nuevos");
-    nowPlayingMovies.slice(0, 10).forEach((movie) => {
-      const card = createContentCard(movie, "movie");
-      nowPlayingSlider.appendChild(card);
-    });
-
-    // Populate upcoming movies slider
-    const upcomingMovies = await fetchContent("movie", "upcoming");
-    const upcomingSlider = document.getElementById("slider-proximos");
-    upcomingMovies.slice(0, 10).forEach((movie) => {
-      const card = createContentCard(movie, "movie");
-      upcomingSlider.appendChild(card);
-    });
+    // Populate secondary sliders
+    await populateSlider("slider-top10", "movie", "top_rated");
+    await populateSlider("slider-nuevos", "movie", "now_playing");
+    await populateSlider("slider-proximos", "movie", "upcoming");
   } catch (error) {
-    console.error("Error initializing movies page:", error);
+    console.error("Error initializing page:", error);
   }
 }
 
-// Initialize the page when the DOM is loaded
-document.addEventListener("DOMContentLoaded", initializeMoviesPage);
+// Initialize when the DOM is loaded
+document.addEventListener("DOMContentLoaded", initializePage);

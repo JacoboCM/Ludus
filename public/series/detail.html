@@ -3,25 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ludus - Detalles</title>
-    <link rel="stylesheet" href="styles/detailPage.css" />
+    <title>Ludus - Series</title>
     <link rel="stylesheet" href="styles/style.css" />
     <link
       rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.css"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+      integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
     />
     <script type="module" src="/components/nav.js"></script>
     <script type="module" src="/components/footer.js"></script>
+    <script type="module" src="/components/slider-card.js"></script>
+    <script type="module" src="/components/slider-arrows.js"></script>
   </head>
-
   <body>
     <ludus-nav></ludus-nav>
-    <section class="informacion">
-      <div id="resultado"></div>
+    <section class="slider-secundario">
+      <div class="slider-wrapper">
+        <h3>Top 10 Series</h3>
+        <slider-arrows target="slider-top10"></slider-arrows>
+        <div class="wrapper" id="slider-top10"></div>
+      </div>
+      <div class="slider-wrapper">
+        <h3>Nuevas Series</h3>
+        <slider-arrows target="slider-nuevos"></slider-arrows>
+        <div class="wrapper" id="slider-nuevos"></div>
+      </div>
+      <div class="slider-wrapper">
+        <h3>Próximos Estrenos</h3>
+        <slider-arrows target="slider-proximos"></slider-arrows>
+        <div class="wrapper" id="slider-proximos"></div>
+      </div>
     </section>
     <ludus-footer></ludus-footer>
 
     <script src="script.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/basiclightbox@5.0.4/dist/basicLightbox.min.js"></script>
   </body>
 </html>
