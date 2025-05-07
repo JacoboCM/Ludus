@@ -152,7 +152,7 @@ export class SliderCard extends LitElement {
   }
 
   handleClick() {
-    window.location.href = `/${this.type}s/detail.html?id=${this.id}`;
+    window.location.href = `/detail.html?id=${this.id}&type=${this.type}`;
   }
 
   render() {
