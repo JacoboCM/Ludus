@@ -70,9 +70,16 @@ export class LudusNav extends LitElement {
     }
 
     .nav-logo__image {
-      width: 30px;
-      height: 30px;
-      margin-right: 5px;
+      width: 40px;
+      height: 38px;
+      position: relative;
+      bottom: 4px;
+    }
+
+    #nav-text-logo {
+      padding: 0;
+      font-size: 2rem;
+      font-weight: bold;
     }
 
     .nav-text {
@@ -83,8 +90,8 @@ export class LudusNav extends LitElement {
       align-items: center;
       border-radius: 4px;
       color: var(--white);
-      font-size: 1.1rem;
-      font-weight: 500;
+      font-size: 1.2rem;
+      font-weight: bold;
       transition: all 0.2s ease;
     }
 
@@ -116,10 +123,10 @@ export class LudusNav extends LitElement {
             <a class="nav-link" href="/">
               <img
                 class="nav-logo__image"
-                src="/assets/other_assets/ico_Ludus.png"
+                src="/assets/other_assets/ico_Ludus2.png"
                 alt="Ludus Logo"
               />
-              <h2 class="nav-text">Ludus</h2>
+              <h2 id="nav-text-logo" class="nav-text">Ludus</h2>
             </a>
           </li>
           <div class="nav-items">
