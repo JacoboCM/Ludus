@@ -20,5 +20,22 @@ async function fetchContent(type, endpoint) {
   }
 }
 
+// Fetch content details from TMDB
+async function fetchContentDetails(type, id) {
+  try {
+    const response = await fetch(
+      `${TMDB_BASE_URL}/${type}/${id}?api_key=${TMDB_API_KEY}&language=es-ES&append_to_response=videos,credits,similar`
+    );
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error(`Error fetching details for ${type} ${id}:`, error);
+    return null;
+  }
+}
+
 // Export functions
-export { fetchContent, TMDB_IMAGE_BASE_URL, TMDB_API_KEY };
+export { fetchContent, fetchContentDetails, TMDB_IMAGE_BASE_URL, TMDB_API_KEY };
