@@ -7,7 +7,7 @@ export class SliderArrows extends LitElement {
       top: 50%;
       transform: translateY(-50%);
       background-color: transparent;
-      color: var(--color1, #fff);
+      color: var(--color1);
       border: none;
       font-size: 4rem;
       cursor: pointer;

@@ -260,32 +260,6 @@ body > h3 {
   width: 1000px;
 }
 
-.arrow-btn {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: transparent;
-  color: var(--color1);
-  border: none;
-  font-size: 4rem;
-  cursor: pointer;
-  z-index: 10;
-  width: 30px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.arrow-left {
-  left: -40px;
-}
-
-.arrow-right {
-  right: -40px;
-}
-
 footer {
   background-color: transparent;
   min-height: 200px;

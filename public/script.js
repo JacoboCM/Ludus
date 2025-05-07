@@ -1,17 +1,17 @@
-import { populateSlider } from "../utils/index.js";
+import { populateSlider } from "./utils";
 
-async function initializeMoviesPage() {
+async function initializeHomePage() {
   try {
     // Populate main slider (now playing movies)
     // await populateSlider("slider-principal", "movie", "now_playing");
 
-    // Populate secondary sliders
+    // Acá se populan los sliders para la HomePage
     await populateSlider("slider-top10", "movie", "top_rated");
-    await populateSlider("slider-nuevos", "movie", "now_playing");
+    await populateSlider("slider-nuevos", "tv", "on_the_air");
     await populateSlider("slider-proximos", "movie", "upcoming");
   } catch (error) {
     console.error("Error initializing page:", error);
   }
 }
 
-document.addEventListener("DOMContentLoaded", initializeMoviesPage);
+document.addEventListener("DOMContentLoaded", initializeHomePage);
