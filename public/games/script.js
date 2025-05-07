@@ -103,44 +103,55 @@ function buscarJuego(id) {
             if (data.similar_games && data.similar_games.length > 0) {
                 let sliderHTML = '';
                 data.similar_games.forEach(game => {
+                    const rating = game.total_rating || 0;
+                    const formattedRating = Math.round(rating);
+                    const releaseDate = game.first_release_date || 'Sin fecha';
+
                     if (game.cover) {
                         sliderHTML += `
                             <div class="item">
                                 <a href="/games/detail.html?id=${game.id}">
                                     <img src="${game.cover}" alt="Cover similar" />
+                                    <div class="info-slider">
+                                        <h4 class="titulo-juego">${game.name}</h4>
+                                        <p class="fecha-lanzamiento">📅 ${releaseDate}</p>
+                                        <div class="rating-estrella">
+                                            <span class="estrella">★</span> ${formattedRating}
+                                        </div>
+                                    </div>
                                 </a>
                             </div>`;
                     }
                 });
-            
+
                 const sliderWrapper = document.createElement('div');
                 sliderWrapper.className = 'slider-wrapper';
-            
+
                 const sliderContainer = document.createElement('div');
                 sliderContainer.className = 'wrapper';
                 sliderContainer.id = 'slider-relacionados';
                 sliderContainer.innerHTML = sliderHTML;
-            
+
                 const arrowLeft = document.createElement('button');
                 arrowLeft.className = 'arrow-btn arrow-left';
                 arrowLeft.textContent = '‹';
-            
+
                 const arrowRight = document.createElement('button');
                 arrowRight.className = 'arrow-btn arrow-right';
                 arrowRight.textContent = '›';
-            
+
                 sliderWrapper.appendChild(arrowLeft);
                 sliderWrapper.appendChild(sliderContainer);
                 sliderWrapper.appendChild(arrowRight);
-            
+
                 arrowLeft.addEventListener('click', () => {
                     sliderContainer.scrollBy({ left: -sliderContainer.clientWidth, behavior: 'smooth' });
                 });
-            
+
                 arrowRight.addEventListener('click', () => {
                     sliderContainer.scrollBy({ left: sliderContainer.clientWidth, behavior: 'smooth' });
                 });
-            
+
                 contenido += `<h3 class="titulo-slider">Juegos relacionados</h3>`;
                 setTimeout(() => {
                     const contenedorSlider = document.createElement('div');
@@ -238,13 +249,24 @@ async function cargarTop10() {
         // Creamos un section que contendrá los items
         let sliderHTML = '';
         top10Games.forEach(game => {
+            const rating = game.total_rating || 0;
+            const formattedRating = Math.round(rating);
+            const releaseDate = game.first_release_date || 'Sin fecha';
+
             sliderHTML += `
                 <div class="item">
                     <a href="/games/detail.html?id=${game.id}">
                         <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                        <div class="info-slider">
+                            <h4 class="titulo-juego">${game.name}</h4>
+                            <p class="fecha-lanzamiento">📅 ${releaseDate}</p>
+                            <div class="rating-estrella">
+                                <span class="estrella">★</span> ${formattedRating}
+                            </div>
+                        </div>
                     </a>
                 </div>
-                `;
+            `;
         });
         sliderContainer.innerHTML = sliderHTML;
         // Crear botones de flechas
@@ -284,10 +306,21 @@ async function cargarNuevos() {
         let sliderHTML = '';
 
         nuevosGames.forEach(game => {
+            const rating = game.total_rating || 0;
+            const formattedRating = Math.round(rating);
+            const releaseDate = game.first_release_date || 'Sin fecha';
+
             sliderHTML += `
                 <div class="item">
                     <a href="/games/detail.html?id=${game.id}">
                         <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                        <div class="info-slider">
+                            <h4 class="titulo-juego">${game.name}</h4>
+                            <p class="fecha-lanzamiento">📅 ${releaseDate}</p>
+                            <div class="rating-estrella">
+                                <span class="estrella">★</span> ${formattedRating}
+                            </div>
+                        </div>
                     </a>
                 </div>
             `;
@@ -329,10 +362,18 @@ async function cargarProximos() {
         let sliderHTML = '';
 
         proximosGames.forEach(game => {
+            const rating = game.total_rating || 0;
+            const formattedRating = Math.round(rating);
+            const releaseDate = game.first_release_date || 'Sin fecha';
+
             sliderHTML += `
                 <div class="item">
                     <a href="/games/detail.html?id=${game.id}">
                         <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                        <div class="info-slider">
+                            <h4 class="titulo-juego">${game.name}</h4>
+                            <p class="fecha-lanzamiento">📅 ${releaseDate}</p>
+                        </div>
                     </a>
                 </div>
             `;
@@ -379,10 +420,21 @@ async function cargarTop10PorRuta(ruta, idContenedor) {
             return;
         }
         juegos.forEach(game => {
+            const rating = game.total_rating || 0;
+            const formattedRating = Math.round(rating);
+            const releaseDate = game.first_release_date || 'Sin fecha';
+
             sliderHTML += `
                 <div class="item">
                     <a href="/games/detail.html?id=${game.id}">
                         <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                        <div class="info-slider">
+                            <h4 class="titulo-juego">${game.name}</h4>
+                            <p class="fecha-lanzamiento">📅 ${releaseDate}</p>
+                            <div class="rating-estrella">
+                                <span class="estrella">★</span> ${formattedRating}
+                            </div>
+                        </div>
                     </a>
                 </div>
             `;
@@ -429,10 +481,21 @@ async function cargarNuevosPorPlataforma(plataforma, idContenedor) {
             return;
         }
         nuevosGames.forEach(game => {
+            const rating = game.total_rating || 0;
+            const formattedRating = Math.round(rating);
+            const releaseDate = game.first_release_date || 'Sin fecha';
+
             sliderHTML += `
                 <div class="item">
                     <a href="/games/detail.html?id=${game.id}">
                         <img src="${game.cover ? game.cover : 'ruta/imagen-por-defecto.jpg'}" alt="${game.name}" />
+                        <div class="info-slider">
+                            <h4 class="titulo-juego">${game.name}</h4>
+                            <p class="fecha-lanzamiento">📅 ${releaseDate}</p>
+                            <div class="rating-estrella">
+                                <span class="estrella">★</span> ${formattedRating}
+                            </div>
+                        </div>
                     </a>
                 </div>
             `;

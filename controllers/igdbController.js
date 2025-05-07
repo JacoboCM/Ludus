@@ -69,12 +69,13 @@ const buscarJuegoPorNombre = async (query) => {
             }
         );
 
-        const juegos = await Promise.all(response.data.map(async (juego) => {
-            if (juego.cover) {
-                juego.cover = await obtenerCover(juego.cover);
-            }
-            return juego;
-        }));
+        const juegos = response.data;
+        const coverIds = juegos.map(j => j.cover).filter(Boolean);
+        const coversMap = await obtenerCoversEnLote(coverIds);
+
+        juegos.forEach(j => {
+            j.cover = coversMap[j.cover] || null;
+        });
 
         cache.set(cacheKey, juegos);
         return juegos;
@@ -200,7 +201,7 @@ const obtenerCoversSimilares = async (ids) => {
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            `fields id, cover; where id = (${ids.join(',')});`,
+            `fields id, name, cover, total_rating, total_rating_count, first_release_date; where id = (${ids.join(',')});`,
             {
                 headers: {
                     'Client-ID': clientId,
@@ -209,13 +210,23 @@ const obtenerCoversSimilares = async (ids) => {
                 }
             }
         );
-        // Ahora, para cada juego, usamos obtenerCover para obtener la URL real
+        // Para cada juego, usamos obtenerCover y procesamos los nuevos campos
         const covers = await Promise.all(response.data.map(async game => {
-            let coverUrl = null;
-            if (game.cover) {
-                coverUrl = await obtenerCover(game.cover);
-            }
-            return { id: game.id, cover: coverUrl };
+            const coverUrl = game.cover ? await obtenerCover(game.cover) : null;
+
+            const releaseDate = game.first_release_date
+                ? new Date(game.first_release_date * 1000).toLocaleDateString('es-ES', { day: 'numeric', month: 'short', year: 'numeric' })
+                : 'Sin fecha';
+
+            const rating = game.total_rating ? Math.round(game.total_rating) : 0;
+
+            return {
+                id: game.id,
+                name: game.name,
+                cover: coverUrl,
+                first_release_date: releaseDate,
+                total_rating: rating
+            };
         }));
         return covers;
     } catch (error) {
@@ -455,7 +466,9 @@ const obtenerJuego = async (gameId) => {
 
     // Procesa juegos similares
     if (juego.similar_games && Array.isArray(juego.similar_games)) {
-        juego.similar_games = await obtenerCoversSimilares(juego.similar_games);
+        const similarIds = juego.similar_games.map(j => typeof j === 'object' ? j.id : j);
+        juego.similar_games = await obtenerCoversSimilares(similarIds);
+        juego.similar_games.sort((a, b) => b.total_rating - a.total_rating);
     }
 
     // Procesa las URLs de sitios web
@@ -555,7 +568,7 @@ const obtenerTop10 = async () => {
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            'fields id, name, total_rating, total_rating_count, cover; where total_rating_count > 1800; sort total_rating desc; limit 10;',
+            'fields id, name, first_release_date, total_rating, total_rating_count, cover; where total_rating_count > 1800; sort total_rating desc; limit 10;',
             {
                 headers: {
                     'Client-ID': clientId,
@@ -571,6 +584,18 @@ const obtenerTop10 = async () => {
 
         juegos.forEach(j => {
             j.cover = coversMap[j.cover] || null;
+
+            // Formatear la fecha de lanzamiento si está disponible
+            if (j.first_release_date) {
+                const dateObj = new Date(j.first_release_date * 1000);
+                const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+                j.first_release_date = dateObj.toLocaleDateString('es-ES', opciones);
+            }
+
+            // Redondear la puntuación
+            if (j.total_rating) {
+                j.total_rating = Math.round(j.total_rating);
+            }
         });
 
         cache.set('top10', juegos);
@@ -593,7 +618,7 @@ const obtenerNuevosLanzamientos = async () => {
     try {
         const response = await axios.post(
             'https://api.igdb.com/v4/games',
-            `fields id, name, first_release_date, cover, total_rating_count;
+            `fields id, name, first_release_date, cover, total_rating, total_rating_count;
             where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} & total_rating_count > 10 & cover != null;
             sort total_rating_count desc;
             limit 10;`,
@@ -612,6 +637,16 @@ const obtenerNuevosLanzamientos = async () => {
 
         juegos.forEach(j => {
             j.cover = coversMap[j.cover] || null;
+
+            if (j.first_release_date) {
+                const dateObj = new Date(j.first_release_date * 1000);
+                const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+                j.first_release_date = dateObj.toLocaleDateString('es-ES', opciones);
+            }
+
+            if (j.total_rating) {
+                j.total_rating = Math.round(j.total_rating);
+            }
         });
 
         cache.set('nuevos', juegos);
@@ -657,6 +692,12 @@ const obtenerProximosLanzamientos = async () => {
 
         juegos.forEach(j => {
             j.cover = coversMap[j.cover] || null;
+
+            if (j.first_release_date) {
+                const dateObj = new Date(j.first_release_date * 1000);
+                const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+                j.first_release_date = dateObj.toLocaleDateString('es-ES', opciones);
+            }
         });
 
         cache.set('proximos', juegos);
@@ -675,7 +716,7 @@ const obtenerTop10Pc = async () => {
 
     try {
         const consulta = `
-            fields id, name, cover, total_rating, hypes, total_rating_count;
+            fields id, name, first_release_date, cover, total_rating, total_rating_count;
             where platforms = [6]
             & total_rating != null
             & total_rating_count > 600
@@ -698,6 +739,16 @@ const obtenerTop10Pc = async () => {
 
         juegos.forEach(j => {
             j.cover = coversMap[j.cover] || null;
+
+            if (j.first_release_date) {
+                const dateObj = new Date(j.first_release_date * 1000);
+                const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+                j.first_release_date = dateObj.toLocaleDateString('es-ES', opciones);
+            }
+
+            if (j.total_rating) {
+                j.total_rating = Math.round(j.total_rating);
+            }
         });
 
         cache.set(cacheKey, juegos);
@@ -717,7 +768,7 @@ const obtenerTop10Consola = async () => {
 
     try {
         const consulta = `
-            fields id, name, cover, total_rating, hypes, total_rating_count;
+            fields id, name, first_release_date, cover, total_rating, total_rating_count;
             where platforms = (48, 130, 167, 169)
             & total_rating != null
             & total_rating_count > 600
@@ -741,6 +792,16 @@ const obtenerTop10Consola = async () => {
 
         juegos.forEach(j => {
             j.cover = coversMap[j.cover] || null;
+
+            if (j.first_release_date) {
+                const dateObj = new Date(j.first_release_date * 1000);
+                const opciones = { day: 'numeric', month: 'short', year: 'numeric' };
+                j.first_release_date = dateObj.toLocaleDateString('es-ES', opciones);
+            }
+
+            if (j.total_rating) {
+                j.total_rating = Math.round(j.total_rating);
+            }
         });
 
         cache.set(cacheKey, juegos);
