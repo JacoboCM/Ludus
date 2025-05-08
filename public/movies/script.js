@@ -2,9 +2,6 @@ import { populateSlider } from "../utils/index.js";
 
 async function initializeMoviesPage() {
   try {
-    // Populate main slider (now playing movies)
-    // await populateSlider("slider-principal", "movie", "now_playing");
-
     // Populate secondary sliders
     await populateSlider("slider-top10", "movie", "top_rated");
     await populateSlider("slider-nuevos", "movie", "now_playing");
