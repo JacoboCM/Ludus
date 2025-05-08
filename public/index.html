@@ -12,6 +12,7 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <link rel="stylesheet" href="games/styles/style.css"/>
     <script type="module" src="/components/nav.js"></script>
     <script type="module" src="/components/footer.js"></script>
     <script type="module" src="/components/slider-card.js"></script>
@@ -34,6 +35,17 @@
         <h3>Próximos Estrenos</h3>
         <slider-arrows target="slider-proximos"></slider-arrows>
         <div class="wrapper" id="slider-proximos"></div>
+      </div>
+      <div class="slider-wrapper">
+        <h3 class="h3games">Nuevos Lanzamientos</h3>
+        <slider-arrows target="slider-nuevos-juegos"></slider-arrows>
+        <div class="wrapper" id="slider-nuevos-juegos"></div>
+      </div>
+      
+      <div class="slider-wrapper">
+        <h3 class="h3games">Próximos Lanzamientos</h3>
+        <slider-arrows target="slider-proximos-juegos"></slider-arrows>
+        <div class="wrapper" id="slider-proximos-juegos"></div>
       </div>
     </section>
     <ludus-footer></ludus-footer>

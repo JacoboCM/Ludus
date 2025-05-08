@@ -241,6 +241,7 @@ body > h3 {
   margin: auto;
   width: 1000px;
   overflow: visible;
+  padding-top: 60px;
 }
 
 .slider-secundario .slider-wrapper {
@@ -258,6 +259,10 @@ body > h3 {
   scroll-behavior: smooth; /* Para desplazamiento suave */
   display: flex; /* Los elementos se distribuyen en línea */
   width: 1000px;
+}
+
+.h3games{
+  margin-bottom: 10px;
 }
 
 footer {
