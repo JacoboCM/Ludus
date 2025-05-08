@@ -228,7 +228,6 @@ async function initializePage() {
   let trendingMovies = [];
   let trendingShows = [];
 
-  // Determine the current page
   const path = window.location.pathname;
 
   if (path.includes("movies")) {
@@ -241,9 +240,7 @@ async function initializePage() {
     trendingMovies = await fetchContent("movie", "top_rated");
   }
 
-  // Combine and format the data for the slider
   const items = [...trendingMovies, ...trendingShows].map((item) => {
-    console.log("item", item);
     const formattedItem = {
       title: item.title || item.name,
       image: `https://image.tmdb.org/t/p/original${item.backdrop_path}`,
@@ -260,7 +257,6 @@ async function initializePage() {
   // Limit to the first 10 items
   const limitedItems = items.slice(0, 10);
 
-  // Set the items property of the main-slider component
   slider.items = limitedItems;
 }
 
