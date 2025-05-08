@@ -241,6 +241,7 @@ body > h3 {
   margin: auto;
   width: 1000px;
   overflow: visible;
+  padding-top: 60px;
 }
 
 .slider-secundario .slider-wrapper {
