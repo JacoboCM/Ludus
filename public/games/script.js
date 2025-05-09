@@ -227,8 +227,41 @@ async function cargarSliderPrincipal() {
                 // Actualiza la clase 'active'
                 dots.forEach(d => d.classList.remove('active'));
                 dot.classList.add('active');
+                // Actualiza el índice actual para el scroll automático
+                currentIndex = index;
             });
         });
+
+        // Scroll automático mejorado cada 5 segundos
+        let currentIndex = 0;
+        const slidesAuto = sliderContainer.querySelectorAll('.item');
+        const dotsAuto = sliderContainer.nextElementSibling?.querySelectorAll('.dot');
+
+        function goToSlide(index) {
+            const scrollAmount = sliderContainer.clientWidth * index;
+            sliderContainer.scrollTo({
+                left: scrollAmount,
+                behavior: 'smooth'
+            });
+
+            // Actualizar puntos activos
+            if (dotsAuto && dotsAuto.length > 0) {
+                dotsAuto.forEach(dot => dot.classList.remove('active'));
+                if (dotsAuto[index]) dotsAuto[index].classList.add('active');
+            }
+        }
+
+        setInterval(() => {
+            currentIndex++;
+            if (currentIndex >= slidesAuto.length) {
+                // Ir al inicio sin animación para evitar el salto visual
+                sliderContainer.scrollTo({ left: 0, behavior: 'auto' });
+                currentIndex = 0;
+                goToSlide(currentIndex); // reposiciona con animación suave
+                return;
+            }
+            goToSlide(currentIndex);
+        }, 5000);
     } catch (error) {
         console.error('Error al cargar el slider principal:', error);
     }

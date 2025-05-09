@@ -523,10 +523,10 @@ const obtenerSliderPrincipal = async () => {
             'https://api.igdb.com/v4/games',
             `fields id, name, first_release_date, artworks, total_rating_count, hypes;
             where first_release_date >= ${oneMonthAgo} & first_release_date <= ${currentTimestamp} 
-            & hypes > 20
-            & total_rating_count > 30;
+            & hypes > 10
+            & total_rating_count > 15;
             sort total_rating_count desc;
-            limit 5;`,
+            limit 10;`,
             {
                 headers: {
                     'Client-ID': clientId,
