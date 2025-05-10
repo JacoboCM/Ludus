@@ -30,7 +30,7 @@ export class SliderArrows extends LitElement {
   `;
 
   static properties = {
-    target: { type: String }, // ID of the slider to control
+    target: { type: String },
   };
 
   constructor() {

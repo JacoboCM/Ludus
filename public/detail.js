@@ -6,7 +6,7 @@ import {
 async function initializeDetailPage() {
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get("id");
-  const type = urlParams.get("type") || "movie"; // Default to movie if type not specified
+  const type = urlParams.get("type") || "movie";
 
   if (!id) {
     window.location.href = "/";
