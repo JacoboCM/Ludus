@@ -68,9 +68,9 @@ nav ul li h2 {
   padding: 10px 20px;
   border-radius: 6px;
   /*background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
-    /*background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;*/
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;*/
 }
 
 nav ul li:hover h2 {
@@ -204,22 +204,22 @@ nav ul li:active {
 }
 
 .screenshots-container {
-  width: 1400px;       /* O max-width: 1300px; dependiendo de cómo quieras que se comporte en dispositivos más pequeños */
+  width: 1400px;
   margin: 20px 0 20px 0;
-  display: flex;       /* Para disponer las imágenes en una fila */
+  display: flex;
   gap: 5px;
 }
 
 .screenshots-container .screenshot {
   flex: 1; 
-  width: 100px;            /* Cada imagen se adapta al espacio disponible */
-  height: 100px;       /* Altura deseada para las imágenes; ajústala a tu gusto */
-  object-fit: cover;   /* Hace que la imagen ocupe todo el espacio definido sin distorsionar */
-  transition: transform 0.3s ease; /* Para el efecto hover, si lo deseas */
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  transition: transform 0.3s ease;
   border-radius: 5px;
 }
 
-.basicLightbox__placeholder img { /*Edita el estilo de la libreria*/
+.basicLightbox__placeholder img { /*Edita el estilo de la libreria basicLightbox*/
   border-radius: 5px;
 }
 
@@ -368,6 +368,5 @@ h6 {
 }
 
 .logo-footer button {
-  /*hereda el resto de estilo del button +Añadir*/
   font-size: 16px;
 }

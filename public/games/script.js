@@ -1,4 +1,6 @@
+// Este script se encarga de cargar los datos de los juegos desde la API y mostrarlos en la página
 function buscarJuego(id) {
+    // Verificar si el id es un número válido
     fetch(`/api/juego/${id}`)
         .then(response => response.json())
         .then(data => {
@@ -8,14 +10,10 @@ function buscarJuego(id) {
                 resultado.innerHTML = `<p>${data.error}</p>`;
                 return;
             }
-
+            // Inicializar el contenido
             let contenido = "";
 
-            /*
-            if (data.cover) {
-                contenido += `<img src="${data.cover}" alt="Portada del juego">`;
-            }
-            */
+            //cargar top-section y video-container
             contenido += `
                 <div class="top-section">
                     <div class="video-container contenedor-blur">`;
@@ -34,7 +32,7 @@ function buscarJuego(id) {
             } else {
                 contenido += `<p><strong>Videos:</strong> No disponibles</p>`;
             }
-
+            // Cargar contendor de detalles
             contenido += `
                     </div>  <!-- Fin de video-container -->
                     <div class="detail-container contenedor-blur">
@@ -56,7 +54,7 @@ function buscarJuego(id) {
                     </div>  <!-- Fin de details-container -->
                 </div>  <!-- Fin de top-section -->
             `;
-
+            // Cargar bottom-section 
             contenido += `
                 <div class="bottom-section contenedor-blur">
                     <p>${data.storyline}</p>
@@ -68,7 +66,7 @@ function buscarJuego(id) {
 
                     </div>  <!-- Fin de bottom-section -->
             `;
-
+            // Cargar galería de imágenes         
             if (data.screenshots && data.screenshots.length > 0) {
                 let screenshotsHTML = `<div class="screenshots-container contenedor-blur">`;
                 data.screenshots.forEach(screenshot => {
@@ -85,7 +83,7 @@ function buscarJuego(id) {
                     });
                 }, 0);
             }
-
+            // Cargar cuadriculas de los desarrolladores
             if (data.websites && data.websites.length > 0) {
                 contenido += `
                 <div class="webs-relacionadas contenedor-blur">
@@ -99,7 +97,7 @@ function buscarJuego(id) {
                 </div>
             `;
             }
-
+            // Cargar el slider de juegos similares
             if (data.similar_games && data.similar_games.length > 0) {
                 let sliderHTML = '';
                 data.similar_games.forEach(game => {
@@ -131,7 +129,7 @@ function buscarJuego(id) {
                 sliderContainer.className = 'wrapper';
                 sliderContainer.id = 'slider-relacionados';
                 sliderContainer.innerHTML = sliderHTML;
-
+                // Crear botones de flechas
                 const arrowLeft = document.createElement('button');
                 arrowLeft.className = 'arrow-btn arrow-left';
                 arrowLeft.textContent = '‹';
@@ -267,9 +265,9 @@ async function cargarSliderPrincipal() {
     }
 }
 
+// Cargar el slider de los 10 mejores juegos
 async function cargarTop10() {
     try {
-        // Asegúrate de que la URL del fetch coincida con la ruta montada en tu servidor.
         const response = await fetch('/api/juego/top10');
         const top10Games = await response.json();
 
@@ -279,7 +277,6 @@ async function cargarTop10() {
             return;
         }
 
-        // Creamos un section que contendrá los items
         let sliderHTML = '';
         top10Games.forEach(game => {
             const rating = game.total_rating || 0;
@@ -330,7 +327,7 @@ async function cargarTop10() {
         console.error('Error al cargar Top 10:', error);
     }
 }
-
+// Cargar los nuevos lanzamientos
 async function cargarNuevos() {
     try {
         const response = await fetch('/api/juego/nuevos'); 
@@ -387,6 +384,7 @@ async function cargarNuevos() {
     }
 }
 
+// Cargar los próximos lanzamientos
 async function cargarProximos() {
     try {
         const response = await fetch('/api/juego/proximos');
@@ -440,7 +438,7 @@ async function cargarProximos() {
     }
 }
 
-// Nueva función: cargarTop10PorRuta
+// función para generar el slider de juegos por plataforma(consola/PC)
 async function cargarTop10PorRuta(ruta, idContenedor) {
     try {
         const response = await fetch(ruta);
@@ -502,6 +500,7 @@ async function cargarTop10PorRuta(ruta, idContenedor) {
     }
 }
 
+/* Funcion para mostrar los nuevos juegos por plataforma
 async function cargarNuevosPorPlataforma(plataforma, idContenedor) {
     try {
         const response = await fetch(`/api/juego/exclusivos/${plataforma}`);
@@ -561,7 +560,9 @@ async function cargarNuevosPorPlataforma(plataforma, idContenedor) {
         console.error(`Error al cargar nuevos de ${plataforma}:`, error);
     }
 }
+*/
 
+// Devuelve el valor del parámetro indicado desde la URL para usar el id para ir a la página de detalle
 function getQueryParam(param) {
     const params = new URLSearchParams(window.location.search);
     return params.get(param);
@@ -569,29 +570,27 @@ function getQueryParam(param) {
 
 // Llamar a las funciones en DOMContentLoaded o al cargar la página
 document.addEventListener("DOMContentLoaded", () => {
-    // Si existe el contenedor para el slider principal, cargar ese slider:
+    // Cargar el slider principal
     if (document.getElementById("slider-principal")) {
         cargarSliderPrincipal();
     }
-
-    // Si existen contenedores para top10, nuevos y próximos, cargarlos:
+    // Cargar el slider de los 10 mejores juegos
     if (document.getElementById("slider-top10")) {
         cargarTop10();
     }
-
+    // Cargar el slider de los nuevos lanzamientos
     if (document.getElementById("slider-nuevos")) {
         cargarNuevos();
     }
-
+    // Cargar el slider de los próximos lanzamientos
     if (document.getElementById("slider-proximos")) {
         cargarProximos();
     }
-
     //Cargar top10 por ruta específica para PS5, XBOX+PC y Nintendo
     if (document.getElementById("slider-top-consola")) {
         cargarTop10PorRuta('/api/juego/top10/consola', 'slider-top-consola');
     }
-
+    //Cargar top10 por ruta específica para PC
     if (document.getElementById("slider-top-pc")) {
         cargarTop10PorRuta('/api/juego/top10/pc', 'slider-top-pc');
     }
@@ -606,6 +605,3 @@ document.addEventListener("DOMContentLoaded", () => {
         buscarJuego(gameId);
     }
 });
-
-// Prueba con un ID de juego
-//buscarJuego(25076);

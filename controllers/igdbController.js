@@ -9,6 +9,7 @@ const clientId = process.env.CLIENT_ID.trim();
 const accessToken = process.env.ACCESS_TOKEN.trim();
 const deepLApiKey = process.env.DEEPL_API_KEY.trim();
 
+// Se define un objeto para mapear los campos de IGDB y descartar los que no se necesitan
 const tablas = {
     //age_ratings: 'age_ratings',
     //alternative_names: 'alternative_names',
@@ -85,6 +86,7 @@ const buscarJuegoPorNombre = async (query) => {
     }
 };
 
+// Función para traducir texto usando la API de DeepL
 const traducirTexto = async (texto, targetLang = 'ES') => {
     if (!texto) return 'Historia No disponible';
 
@@ -186,7 +188,7 @@ const obtenerCoversEnLote = async (ids) => {
         response.data.forEach(cover => {
             let url = cover.url;
             if (url.startsWith("//")) url = "https:" + url;
-            if (url.includes("t_thumb")) url = url.replace("t_thumb", "t_cover_big");
+            if (url.includes("t_thumb")) url = url.replace("t_thumb", "t_cover_big");// Cambia a la versión de mayor resolución
             coversMap[cover.id] = url;
         });
 
@@ -285,6 +287,7 @@ const obtenerVideos = async (ids) => {
     }
 };
 
+//Obtener url de las capturas de pantalla
 const obtenerScreenshots = async (ids) => {
     if (!ids || ids.length === 0) return [];
 
@@ -313,7 +316,7 @@ const obtenerScreenshots = async (ids) => {
         return [];
     }
 };
-
+//Obtener url de los artworks
 const obtenerArtworks = async (ids) => {
     if (!ids || ids.length === 0) return [];
 
@@ -342,7 +345,6 @@ const obtenerArtworks = async (ids) => {
         return [];
     }
 };
-
 
 //Obtiene ids de las compañias involucradas 
 const obtenerInvolvedCompanies = async (ids) => {
@@ -389,6 +391,8 @@ const obtenerCompanies = async (ids) => {
     }
 };
 
+// Se obtiene el juego completo, se traduce y se almacenan los resultados en caché
+// Se usa un cache para evitar consultas repetidas a la API
 const obtenerJuego = async (gameId) => {
     const cacheKey = `juego-${gameId}`;
     const cachedJuego = cache.get(cacheKey);
@@ -508,6 +512,7 @@ const obtenerJuego = async (gameId) => {
     return juego;
 };
 
+// Función para obtener el slider principal
 const obtenerSliderPrincipal = async () => {
     const cacheKey = 'sliderPrincipal';
     const cachedData = cache.get(cacheKey);
@@ -515,8 +520,8 @@ const obtenerSliderPrincipal = async () => {
         return cachedData;
     }
 
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const oneMonthAgo = currentTimestamp - (120 * 24 * 60 * 60);
+    const currentTimestamp = Math.floor(Date.now() / 1000);// Obtener el timestamp actual
+    const oneMonthAgo = currentTimestamp - (120 * 24 * 60 * 60);// hace 120 días
 
     try {
         const response = await axios.post(
@@ -536,7 +541,7 @@ const obtenerSliderPrincipal = async () => {
             }
         );
 
-        // Procesa cada juego: si tiene screenshots, obten la URL del primero y ajusta la resolución.
+        // Si tiene artwork, obten la URL del primero y ajusta la resolución, si no, se usa screenshot
         const juegos = await Promise.all(response.data.map(async (juego) => {
             if (juego.artworks && juego.artworks.length > 0) {
                 const artworksArr = await obtenerArtworks(juego.artworks.slice(0, 1));
@@ -560,6 +565,7 @@ const obtenerSliderPrincipal = async () => {
     }
 };
 
+// Función para obtener el top 10 de juegos
 const obtenerTop10 = async () => {
     const cachedTop10 = cache.get('top10');
     if (cachedTop10) {
@@ -577,7 +583,7 @@ const obtenerTop10 = async () => {
                 }
             }
         );
-        // Optimización: obtener todas las covers en lote
+        // Obtener todas las covers en lote
         const juegos = response.data;
         const coverIds = juegos.map(j => j.cover).filter(Boolean);
         const coversMap = await obtenerCoversEnLote(coverIds);
@@ -605,15 +611,15 @@ const obtenerTop10 = async () => {
         throw error;
     }
 };
-
+// Función para obtener nuevos lanzamientos
 const obtenerNuevosLanzamientos = async () => {
     const cachedNuevos = cache.get('nuevos');
     if (cachedNuevos) {
         return cachedNuevos;
     }
 
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const oneMonthAgo = currentTimestamp - (60 * 24 * 60 * 60); // hace 30 días
+    const currentTimestamp = Math.floor(Date.now() / 1000);// Obtener el timestamp actual
+    const oneMonthAgo = currentTimestamp - (60 * 24 * 60 * 60); // hace 60 días
 
     try {
         const response = await axios.post(
@@ -656,15 +662,15 @@ const obtenerNuevosLanzamientos = async () => {
         throw error;
     }
 };
-
+// Función para obtener próximos lanzamientos
 const obtenerProximosLanzamientos = async () => {
     const cachedProximos = cache.get('proximos');
     if (cachedProximos) {
         return cachedProximos;
     }
 
-    const currentTimestamp = Math.floor(Date.now() / 1000);
-    const oneYearLater = currentTimestamp + (365 * 24 * 60 * 60);
+    const currentTimestamp = Math.floor(Date.now() / 1000);// Obtener el timestamp actual
+    const oneYearLater = currentTimestamp + (365 * 24 * 60 * 60);// del dia de hoy a un año
 
     try {
         const response = await axios.post(

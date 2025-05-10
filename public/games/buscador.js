@@ -1,3 +1,4 @@
+// Este script se encarga de cargar los datos de los juegos desde las APIs y mostrarlos en la página
 import { TMDB_API_KEY } from "../services/tmdbService";
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
     resultadosMultimedia.innerHTML = "";
 
     try {
-      // Buscar videojuegos
+      // Buscar en IDGB
       const juegosResponse = await fetch(
         `/api/juego/buscar?nombre=${encodeURIComponent(query)}`
       );
@@ -43,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tituloJuegos.textContent = "🎮 Videojuegos";
         tituloJuegos.classList.add("resultado-titulo");
         resultadosJuegos.before(tituloJuegos);
-
+        // Mostrar resultados de IDGB
         juegos.forEach((juego) => {
           const item = document.createElement("div");
           item.classList.add("resultados-item");

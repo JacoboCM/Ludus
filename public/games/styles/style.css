@@ -102,7 +102,7 @@ nav ul li h2 {
   padding: 10px 20px;
   border-radius: 6px;
   /*background-image: linear-gradient(45deg, var(--color1), var(--color2), var(--color3));
-  /*background-clip: text;
+  background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;*/
 }
@@ -253,9 +253,9 @@ body>h3{
 }
 
 .slider-wrapper .wrapper {
-  overflow: hidden; /* Permite el scroll horizontal */
-  scroll-behavior: smooth; /* Para desplazamiento suave */
-  display: flex;    /* Los elementos se distribuyen en línea */
+  overflow: hidden;
+  scroll-behavior: smooth;
+  display: flex;
   width: 1000px;
 }
 
