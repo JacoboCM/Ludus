@@ -8,7 +8,6 @@ export async function populateSlider(sliderId, type, endpoint) {
   content.slice(0, 10).forEach((item) => {
     const card = document.createElement("slider-card");
 
-    // Set the properties for the slider-card component
     card.title = type === "movie" ? item.title : item.name;
     card.imageUrl = `${TMDB_IMAGE_BASE_URL}/w500${item.poster_path}`;
     card.releaseDate = new Date(

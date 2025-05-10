@@ -142,7 +142,7 @@ export class MainSlider extends LitElement {
   }
 
   disconnectedCallback() {
-    // Clear the interval when the component is removed
+    // Limpiar el intervalo cuando el componente es eliminado
     if (this.autoScrollInterval) {
       clearInterval(this.autoScrollInterval);
     }
@@ -231,10 +231,10 @@ async function initializePage() {
   const path = window.location.pathname;
 
   if (path.includes("movies")) {
-    // Fetch trending movies if on the movies page
+    // Obtener películas populares si estamos en la página de películas
     trendingMovies = await fetchContent("movie", "upcoming");
   } else if (path.includes("series")) {
-    // Fetch trending shows if on the series page
+    // Obtener series populares si estamos en la página de series
     trendingShows = await fetchContent("tv", "on_the_air");
   } else {
     trendingMovies = await fetchContent("movie", "top_rated");
@@ -254,7 +254,7 @@ async function initializePage() {
     return formattedItem;
   });
 
-  // Limit to the first 10 items
+  // Limitar a los primeros 10 elementos
   const limitedItems = items.slice(0, 10);
 
   slider.items = limitedItems;
