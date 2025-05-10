@@ -1,7 +1,7 @@
 // Configuración de la API de TMDB
 const TMDB_BASE_URL = "https://api.themoviedb.org/3";
 const TMDB_IMAGE_BASE_URL = "https://image.tmdb.org/t/p";
-const TMDB_API_KEY = "584b4dfbcb4d790686303aa460d8751d";
+const TMDB_API_KEY = "";
 
 // Obtener contenido de TMDB
 async function fetchContent(type, endpoint) {
